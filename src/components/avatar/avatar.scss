@@ -1,0 +1,20 @@
+@import "../../styles/base";
+
+.avatar {
+  margin-right: 10px;
+  
+  .wrapper {
+    @include displayFlex;
+    width: 40px;
+    height: 40px;
+    @include borderRadius(50%);
+    @include justifyContent(center);
+    @include alignItems(center);
+    background: $white;
+    
+    .title {
+      font-size: 30px;
+      @include gradientFontColor;
+    }
+  }
+}

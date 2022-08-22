@@ -1,0 +1,46 @@
+@import "../../styles/base";
+
+@mixin selectedRoom {
+  border: 1px solid $white;
+  @include boxShadow;
+  @include borderRadius(10px);
+}
+
+.rooms {
+  @include displayFlex;
+  @include flexDirection(column);
+  padding: 0.5rem 1rem 0.5rem 0.5rem;
+  overflow-y: auto;
+  height: 100%;
+  width: 300px;
+
+  .room {
+    @include displayFlex;
+    @include alignItems(center);
+    width: 100%;
+    margin: 5px 0;
+    padding: 5px 10px 5px 5px;
+    border: 1px solid transparent;
+
+    .room-data {
+      overflow-x: hidden;
+
+      .username {
+        @include truncateText;
+        font-size: 20px;
+      }
+      .message {
+        @include truncateText;
+        font-size: 14px;
+      }
+    }
+
+    &.selected {
+      @include selectedRoom;
+    }
+    &:hover {
+      @include selectedRoom;
+      cursor: pointer;
+    }
+  }
+}

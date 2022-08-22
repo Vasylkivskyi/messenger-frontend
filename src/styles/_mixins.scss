@@ -1,0 +1,102 @@
+@mixin borderRadius($radius) {
+  -webkit-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin transition($value) {
+  -webkit-transition: $value;
+  transition: $value;
+}
+
+@mixin transform($value) {
+  -webkit-transform: $value;
+  transform: $value;
+}
+
+@mixin transformOrigin($value) {
+  -webkit-transform-origin: $value;
+  transform-origin: $value;
+}
+
+@mixin inlineBlockTop() {
+  display: inline-block;
+  vertical-align: top;
+}
+
+@mixin inlineBlockMid() {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@mixin inlineBlockBottom() {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+@mixin displayFlex() {
+  display: -webkit-flex;
+  display: flex;
+}
+
+@mixin displayInlineFlex() {
+  display: -webkit-inline-flex;
+  display: inline-flex;
+}
+
+@mixin alignSelf($value) {
+  -webkit-align-self: $value;
+  align-self: $value;
+}
+
+@mixin justifyContent($value) {
+  -webkit-justify-content: $value;
+  justify-content: $value;
+}
+
+@mixin flexDirection($value) {
+  -webkit-flex-direction: $value;
+  flex-direction: $value;
+}
+
+@mixin flexWrap() {
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+}
+
+@mixin flexNoWrap() {
+  -webkit-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+}
+
+@mixin alignItems($value) {
+  -webkit-align-items: $value;
+  align-items: $value;
+}
+
+@mixin gradientBorder($direction) {
+  border-image-slice: 1;
+  border-image-source: linear-gradient(to $direction, rgba(239,42,48,1), rgba(113,39,142,1));
+}
+
+@mixin gradientFontColor() {
+  background: -webkit-linear-gradient(rgba(239,42,48,1), rgba(113,39,142,1));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@mixin truncateText {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@mixin boxShadow {
+  -webkit-box-shadow: 5px 5px 6px -3px $gray; 
+  box-shadow: 5px 5px 6px -3px $gray;
+}
+
+
+
+

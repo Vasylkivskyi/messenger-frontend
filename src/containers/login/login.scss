@@ -1,0 +1,52 @@
+@import '../../styles/base';
+
+.login-container {
+  background-color: $iron;
+  height: 100vh;
+  @include displayFlex;
+  @include justifyContent(center);
+  @include alignItems(center);
+
+  .login-form {
+    @include displayFlex;
+    @include flexDirection(column);
+    @include alignItems(center);
+    width: 380px;
+
+    .logo {
+      width: 100%;
+    }
+
+    h1, h3 {
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: -40px;
+    }
+
+    h3 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 10px 20px;
+      font-size: 20px;
+      @include borderRadius(10px);
+      border: none;
+      width: 250px;
+      margin-bottom: 10px;
+    }
+
+    .login-btn {
+      padding: 10px 16px;
+      font-size: 20px;
+      color: $white;
+      background: rgb(239,42,48);
+      background: linear-gradient(90deg, rgba(239,42,48,1) 0%, rgba(113,39,142,1) 100%);
+      @include borderRadius(10px);
+      border: none;
+      width: 250px;
+    }
+  }
+}
