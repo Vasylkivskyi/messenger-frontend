@@ -1,26 +1,32 @@
 @import "../../styles/base";
 
 @mixin selectedRoom {
-  border: 1px solid $white;
   @include boxShadow;
-  @include borderRadius(10px);
+  border: 1px solid $gray;
 }
 
-.rooms {
+.nav {
   @include displayFlex;
   @include flexDirection(column);
+  position: fixed;
+  top: 4rem;
   padding: 0.5rem 1rem 0.5rem 0.5rem;
   overflow-y: auto;
   height: 100%;
-  width: 300px;
+  width: 20rem;
+  background: $iron;
 
-  .room {
+  .nav-link {
+    text-decoration: none;
     @include displayFlex;
     @include alignItems(center);
     width: 100%;
     margin: 5px 0;
     padding: 5px 10px 5px 5px;
-    border: 1px solid transparent;
+    border: 1px solid $gray;
+    @include borderRadius(10px);
+    background: $white;
+
 
     .room-data {
       overflow-x: hidden;
@@ -28,15 +34,22 @@
       .username {
         @include truncateText;
         font-size: 20px;
+        font-weight: 600;
+        color: $scorpion;
       }
       .message {
         @include truncateText;
         font-size: 14px;
+        color: $ultramarine;
       }
     }
 
-    &.selected {
+    &.active {
       @include selectedRoom;
+      background: $gray;
+      .username {
+        color: $white;
+      }
     }
     &:hover {
       @include selectedRoom;

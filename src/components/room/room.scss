@@ -1,0 +1,81 @@
+@import "../../styles/base";
+
+.room {
+  background-color: $iron;
+  @include displayFlex;
+  position: fixed;
+  overflow-y: auto;
+  top: 4rem;
+  bottom: 0;
+  left: 20rem;
+  right: 0;
+
+  @include displayFlex;
+  @include flexDirection(column);
+
+  .messages-list-container {
+    width: 100%;
+    position: relative;
+    overflow-y: overlay;
+    @include displayFlex;
+    @include flexDirection(column);
+    flex: 1;
+  }
+
+  .input-container {
+    @include displayFlex;
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: flex-end;
+    padding: 0.5rem;
+
+    .textarea-wrapper {
+      flex: 1;
+      background: $white;
+      padding: 0.5rem;
+      @include borderRadius(10px);
+
+      .textarea {
+        display: block;
+        width: 100%;
+        resize: both;
+        min-height: 40px;
+        line-height: 20px;
+        word-break: break-all;
+        outline: none;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+    }
+
+    .send-btn {
+      @include displayFlex;
+      @include justifyContent(center);
+      @include alignItems(center);
+      align-items: center;
+      height: 3rem;
+      width: 3rem;
+      border: 2px solid $white;
+      @include borderRadius(50%);
+      margin-left: 0.5rem;
+
+      &:hover {
+        cursor: pointer;
+        border-color: #9c286d;
+        background: $white;
+        svg path {
+          fill: #9c286d;
+        }
+      }
+
+      svg {
+        height: 1.5rem;
+        path {
+          fill: $white;
+        }
+      }
+    }
+  }
+}
