@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import Avatar from '../Avatar/Avatar';
+import Icon from '../Icon/Icon';
 import './navigation.scss';
 
 type NavElementType = {
@@ -16,7 +16,7 @@ const NavElement: React.FC<{ room: NavElementType }> = ({ room }) => (
     to={{ pathname: `/${room.username}` }}
     className="nav-link"
   >
-    <Avatar title={room.username.charAt(0).toUpperCase()} />
+    <Icon name="face" className="nav-item-icon-wrapper" />
     <div className="room-data">
       <div className="username">{room.username}</div>
       <div className="message">{room.message}</div>

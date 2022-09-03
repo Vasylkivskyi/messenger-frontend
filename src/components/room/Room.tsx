@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import MessagesList from '../messages/MessagesList';
+import MessagesList from '../Messages/MessagesList';
 import './room.scss';
-import { ReactComponent as SendIcon } from '../../images/send.svg';
 import { RoomProps } from '../../types';
+import Icon from '../Icon/Icon';
 
 const messages = [
   {
@@ -119,7 +119,7 @@ const Room: React.FC<RoomProps> = ({ setRoomUserName }) => {
         <div className="textarea-wrapper">
           <span className="textarea" role="textbox" contentEditable />
         </div>
-        <div className="send-btn"><SendIcon /></div>
+        <Icon name="send" className="send-icon-wrapper" />
       </div>
     </div>
   );

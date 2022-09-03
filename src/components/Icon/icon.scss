@@ -1,0 +1,11 @@
+@import "../../styles/base";
+.icon-wrapper {
+  padding: 0.5rem;
+  @include displayFlex;
+  @include justifyContent(center);
+  @include alignItems(center);
+
+  .icon {
+    color: $black;
+  }
+}
