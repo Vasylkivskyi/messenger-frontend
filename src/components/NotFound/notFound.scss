@@ -1,0 +1,28 @@
+@import '../../styles/base';
+
+.not-found {
+  background-color: $white;
+  @include displayFlex;
+  @include justifyContent(center);
+  @include alignItems(center);
+  position: fixed;
+  overflow-y: auto;
+  text-align: center;
+  top: 4rem;
+  bottom: 0;
+  left: 0rem;
+  right: 0;
+
+  .numbers {
+      font-size: 10rem;
+      color: $aquaSqueeze;
+      text-shadow: 1px 1px 1px $elm;
+  }
+
+  h1 {
+    text-shadow: 1px 1px 1px $black;
+    font-size: 3rem;
+    color: $aquaSqueeze;
+    font-weight: 400;
+  }
+}

@@ -6,6 +6,7 @@ import Navigation from '../../components/Navigation/Navigation';
 import EmptyRoom from '../../components/EmptyRoom/EmptyRoom';
 import Room from '../../components/Room/Room';
 import Icon from '../../components/Icon/Icon';
+import NotFound from '../../components/NotFound/NotFound';
 
 const rooms = [
   { id: '1', username: 'Pavlo', message: 'Рада проголосувала за надання полякам в Україні особливих прав та гарантій.' },
@@ -55,6 +56,7 @@ const App = () => {
         <div className="right">
           <Icon name="3p" className="header-icon" />
           <div className="user-name">{roomUserName}</div>
+          <Icon name="logout" className="header-logout" />
         </div>
       </div>
       )}
@@ -64,6 +66,7 @@ const App = () => {
           <Route index element={<EmptyRoom />} />
           <Route path=":roomUserName" element={<Room setRoomUserName={setRoomUserName} />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

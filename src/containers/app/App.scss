@@ -73,6 +73,20 @@
         font-size: 1.4rem;
         color: $elm;
       }
+      .header-logout {
+        margin-left: 2rem;
+
+        .icon {
+          color: $elm;
+        }
+        &:hover {
+          cursor: pointer;
+
+          .icon {
+            color: $black;
+          }
+        }
+      }
     }
   }
 }

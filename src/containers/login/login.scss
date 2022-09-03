@@ -29,27 +29,29 @@
     }
 
     h3 {
+      margin-top: 1rem;
       margin-bottom: 2rem;
     }
 
     input {
-      padding: 1rem 2rem;
-      font-size: 2rem;
-      @include borderRadius(1rem);
+      padding: 0.5rem 1rem;
+      font-size: 1.4rem;
+      @include borderRadius(0.5rem);
       border: 0.1rem solid $alto;
       width: 25rem;
       margin-bottom: 1rem;
     }
 
     .login-btn {
-      padding: 1rem 1.6rem;
-      font-size: 2rem;
+      padding: 0.5rem 1rem;
+      font-size: 1.4rem;
       color: $elm;
       background: rgb(239,42,48);
       background: $white;
-      @include borderRadius(10px);
+      @include borderRadius(0.5rem);
       border: 0.1rem solid $elm;
       width: 25rem;
+      outline: $elm;
 
       &:hover {
         border-color: transparent;

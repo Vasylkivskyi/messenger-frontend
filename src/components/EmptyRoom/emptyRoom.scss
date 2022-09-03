@@ -1,0 +1,29 @@
+@import '../../styles/base';
+
+.empty-room {
+  background-color: $white;
+  @include displayFlex;
+  @include justifyContent(center);
+  @include alignItems(center);
+  position: fixed;
+  overflow-y: auto;
+  top: 4rem;
+  bottom: 0;
+  left: 20rem;
+  right: 0;
+
+  .empty-page-icon-container {
+    .icon {
+      font-size: 10rem;
+      color: $aquaSqueeze;
+      text-shadow: 1px 1px 1px $elm;
+    }
+  }
+
+  h1 {
+    text-shadow: 1px 1px 1px $black;
+    font-size: 3rem;
+    color: $aquaSqueeze;
+    font-weight: 400;
+  }
+}
