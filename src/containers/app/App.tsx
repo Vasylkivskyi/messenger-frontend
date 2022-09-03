@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Route, Routes, useParams } from 'react-router-dom';
+import {
+  Link, Route, Routes, useParams,
+} from 'react-router-dom';
 import Login from '../Login/Login';
 import './App.scss';
 import Navigation from '../../components/Navigation/Navigation';
@@ -46,18 +48,25 @@ const App = () => {
       {isLoggedIn && (
       <div className="head">
         <div className="left">
-          <Icon name="mark_email_unread" className="header-logo-wrapper" />
-          <span className="logo-text">MessengerApp</span>
+          <Link to="/" className="header-logo-wrapper">
+            <Icon name="mark_email_unread" className="header-logo-icon-wrapper" />
+            <span className="logo-text">MessengerApp</span>
+          </Link>
           <div className="search-container">
             <input type="text" placeholder="Search" />
             <Icon name="search" className="header-search-wrapper" />
           </div>
         </div>
+        {isLoggedIn && (
         <div className="right">
           <Icon name="3p" className="header-icon" />
           <div className="user-name">{roomUserName}</div>
-          <Icon name="logout" className="header-logout" />
+          <Link to="/login">
+            {' '}
+            <Icon name="logout" className="header-logout" />
+          </Link>
         </div>
+        )}
       </div>
       )}
       <Routes>

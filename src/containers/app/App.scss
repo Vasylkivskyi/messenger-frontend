@@ -1,7 +1,6 @@
 @import "../../styles/base";
 
 .App {
-  background: $iron;
   font-family: "Roboto", sans-serif;
 
   .head {
@@ -23,16 +22,20 @@
       @include displayFlex;
       @include alignItems(center);
       .header-logo-wrapper {
-        .icon {
-          font-size: 2.5rem;
-          color: $elm;
+        @include displayFlex;
+        @include alignItems(center);
+        .header-logo-icon-wrapper {
+          .icon {
+            font-size: 2.5rem;
+            color: $elm;
+          }
         }
-      }
-      .logo-text {
-        font-size: 2rem;
-        color: $elm;
-        font-weight: 500;
-        margin-right: 2.5rem;
+        .logo-text {
+          font-size: 2rem;
+          color: $elm;
+          font-weight: 500;
+          margin-right: 2.5rem;
+        }
       }
       .search-container {
         padding: 0.5rem;
