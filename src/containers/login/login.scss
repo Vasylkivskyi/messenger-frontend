@@ -12,6 +12,8 @@
     @include flexDirection(column);
     @include alignItems(center);
     width: 38rem;
+    padding-bottom: 2rem;
+    position: relative;
 
     .logo-wrapper {
       .icon {
@@ -60,5 +62,24 @@
         cursor: pointer;
       }
     }
+    .error-message {
+      position: absolute;
+      bottom: 0;
+      font-size: 1rem;
+      color: $coralRed;   
+      font-weight: 500;
+      animation: 0.4s linear 0s  alternate show;
+    }
+  }
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+    transform: translateY(-1rem);    
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

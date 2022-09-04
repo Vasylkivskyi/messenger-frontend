@@ -43,34 +43,36 @@ const App = () => {
   console.log(params);
 
   return (
+
     <div className="App">
       {/* {!isLoggedIn ? <Login /> : <ChatContainer />} */}
       {isLoggedIn && (
-      <div className="head">
-        <div className="left">
-          <Link to="/" className="header-logo-wrapper">
-            <Icon name="mark_email_unread" className="header-logo-icon-wrapper" />
-            <span className="logo-text">MessengerApp</span>
-          </Link>
-          <div className="search-container">
-            <input type="text" placeholder="Search" />
-            <Icon name="search" className="header-search-wrapper" />
+        <div className="head">
+          <div className="left">
+            <Link to="/" className="header-logo-wrapper">
+              <Icon name="mark_email_unread" className="header-logo-icon-wrapper" />
+              <span className="logo-text">MessengerApp</span>
+            </Link>
+            <div className="search-container">
+              <input type="text" placeholder="Search" />
+              <Icon name="search" className="header-search-wrapper" />
+            </div>
           </div>
+          {isLoggedIn && (
+          <div className="right">
+            <Icon name="3p" className="header-icon" />
+            <div className="user-name">{roomUserName}</div>
+            <Link to="/login">
+              {' '}
+              <Icon name="logout" className="header-logout" />
+            </Link>
+          </div>
+          )}
         </div>
-        {isLoggedIn && (
-        <div className="right">
-          <Icon name="3p" className="header-icon" />
-          <div className="user-name">{roomUserName}</div>
-          <Link to="/login">
-            {' '}
-            <Icon name="logout" className="header-logout" />
-          </Link>
-        </div>
-        )}
-      </div>
       )}
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Login showRegister />} />
         <Route path="/" element={<Navigation rooms={rooms} />}>
           <Route index element={<EmptyRoom />} />
           <Route path=":roomUserName" element={<Room setRoomUserName={setRoomUserName} />} />
