@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
-import {
-  Link, Route, Routes, useParams,
-} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import Login from '../Login/Login';
 import './App.scss';
 import Navigation from '../../components/Navigation/Navigation';
 import EmptyRoom from '../../components/EmptyRoom/EmptyRoom';
 import Room from '../../components/Room/Room';
-import Icon from '../../components/Icon/Icon';
 import NotFound from '../../components/NotFound/NotFound';
+import Header from '../../components/Header/Header';
 
 const rooms = [
   { id: '1', username: 'Pavlo', message: 'Рада проголосувала за надання полякам в Україні особливих прав та гарантій.' },
@@ -36,46 +34,24 @@ const rooms = [
 
 // eslint-disable-next-line arrow-body-style
 const App = () => {
-  const [roomUserName, setRoomUserName] = useState<string | undefined>('');
-  const params = useParams();
-  const isLoggedIn = true;
-  // eslint-disable-next-line no-console
-  console.log(params);
+  const [roomName, setRoomName] = useState<string | undefined>('');
+  const location = useLocation();
+  const [isLogged, setIsLogged] = useState<boolean>(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLogged(!!token);
+  }, [location]);
 
   return (
-
     <div className="App">
-      {/* {!isLoggedIn ? <Login /> : <ChatContainer />} */}
-      {isLoggedIn && (
-        <div className="head">
-          <div className="left">
-            <Link to="/" className="header-logo-wrapper">
-              <Icon name="mark_email_unread" className="header-logo-icon-wrapper" />
-              <span className="logo-text">MessengerApp</span>
-            </Link>
-            <div className="search-container">
-              <input type="text" placeholder="Search" />
-              <Icon name="search" className="header-search-wrapper" />
-            </div>
-          </div>
-          {isLoggedIn && (
-          <div className="right">
-            <Icon name="3p" className="header-icon" />
-            <div className="user-name">{roomUserName}</div>
-            <Link to="/login">
-              {' '}
-              <Icon name="logout" className="header-logout" />
-            </Link>
-          </div>
-          )}
-        </div>
-      )}
+      <Header isLogged={isLogged} roomName={roomName} />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Login showRegister />} />
         <Route path="/" element={<Navigation rooms={rooms} />}>
           <Route index element={<EmptyRoom />} />
-          <Route path=":roomUserName" element={<Room setRoomUserName={setRoomUserName} />} />
+          <Route path=":roomUserName" element={<Room setRoomName={setRoomName} isLogged={isLogged} />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

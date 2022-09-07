@@ -1,0 +1,91 @@
+@import "../../styles/base";
+
+.head {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4rem;
+  @include displayFlex;
+  @include alignItems(center);
+  @include justifyContent(space-between);
+  padding: 0.5rem;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 5%);
+  background: $white;
+  border-bottom: 1px solid $alto;
+  z-index: 1;
+  background: $aquaSqueeze;
+  .left {
+    @include displayFlex;
+    @include alignItems(center);
+    .header-logo-wrapper {
+      @include displayFlex;
+      @include alignItems(center);
+      .header-logo-icon-wrapper {
+        .icon {
+          font-size: 2.5rem;
+          color: $elm;
+        }
+      }
+      .logo-text {
+        font-size: 2rem;
+        color: $elm;
+        font-weight: 500;
+        margin-right: 2.5rem;
+      }
+    }
+    .search-container {
+      padding: 0.5rem;
+      width: 19rem;
+      position: relative;
+
+      input {
+        padding: 0.3rem 1rem 0.3rem 2.5rem;
+        border: 0.1rem solid $elm;
+        width: 100%;
+        font-size: 1rem;
+        @include borderRadius(0.6rem);
+        @include titleFontStyle;
+      }
+
+      .header-search-wrapper {
+        position: absolute;
+        top: 0.33rem;
+        left: 0.4rem;
+
+        .icon {
+          color: $elm;
+          font-size: 1.7rem;
+        }
+      }
+    }
+  }
+  .right {
+    @include displayFlex;
+    @include alignItems(center);
+    padding-right: 1rem;
+    .header-icon {
+      .icon {
+        color: $elm;
+      }
+    }
+    .user-name {
+      font-size: 1.4rem;
+      color: $elm;
+    }
+    .header-logout {
+      margin-left: 2rem;
+
+      .icon {
+        color: $elm;
+      }
+      &:hover {
+        cursor: pointer;
+
+        .icon {
+          color: $black;
+        }
+      }
+    }
+  }
+}
