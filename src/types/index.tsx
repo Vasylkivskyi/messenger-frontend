@@ -7,11 +7,9 @@ export type Message = {
 
 export type RoomProps = {
   setRoomName: (roomUserName: string | undefined) => void,
-  isLogged: boolean
 };
 
 export type HeaderPropsType = {
-  isLogged: boolean,
   roomName: string | undefined
 };
 

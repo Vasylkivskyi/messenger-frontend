@@ -7,6 +7,7 @@ import EmptyRoom from '../../components/EmptyRoom/EmptyRoom';
 import Room from '../../components/Room/Room';
 import NotFound from '../../components/NotFound/NotFound';
 import Header from '../../components/Header/Header';
+import { LoggedContext } from '../../context';
 
 const rooms = [
   { id: '1', username: 'Pavlo', message: 'Рада проголосувала за надання полякам в Україні особливих прав та гарантій.' },
@@ -32,10 +33,9 @@ const rooms = [
   { id: '19', username: 'Sasha', message: 'Мы уже даже не помним, какой был последний счет 😄' },
 ];
 
-// eslint-disable-next-line arrow-body-style
 const App = () => {
-  const [roomName, setRoomName] = useState<string | undefined>('');
   const location = useLocation();
+  const [roomName, setRoomName] = useState<string | undefined>('');
   const [isLogged, setIsLogged] = useState<boolean>(false);
 
   useEffect(() => {
@@ -44,18 +44,20 @@ const App = () => {
   }, [location]);
 
   return (
-    <div className="App">
-      <Header isLogged={isLogged} roomName={roomName} />
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Login showRegister />} />
-        <Route path="/" element={<Navigation rooms={rooms} />}>
-          <Route index element={<EmptyRoom />} />
-          <Route path=":roomUserName" element={<Room setRoomName={setRoomName} isLogged={isLogged} />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </div>
+    <LoggedContext.Provider value={isLogged}>
+      <div className="App">
+        <Header roomName={roomName} />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Login showRegister />} />
+          <Route path="/" element={<Navigation rooms={rooms} />}>
+            <Route index element={<EmptyRoom />} />
+            <Route path=":roomUserName" element={<Room setRoomName={setRoomName} />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+    </LoggedContext.Provider>
   );
 };
 

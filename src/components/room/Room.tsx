@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import MessagesList from '../Messages/MessagesList';
 import './room.scss';
 import { RoomProps } from '../../types';
 import Icon from '../Icon/Icon';
+import { LoggedContext } from '../../context';
 
 const messages = [
   {
@@ -98,9 +99,11 @@ const messages = [
   },
 ];
 
-const Room: React.FC<RoomProps> = ({ setRoomName, isLogged }) => {
+const Room: React.FC<RoomProps> = ({ setRoomName }) => {
   const { roomUserName } = useParams();
   const navigate = useNavigate();
+  const isLogged = useContext(LoggedContext);
+
   useEffect(() => {
     if (!isLogged) navigate('/login');
     if (!isLogged) navigate('*');

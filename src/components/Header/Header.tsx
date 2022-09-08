@@ -1,11 +1,14 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { LoggedContext } from '../../context';
 import { HeaderPropsType } from '../../types';
 import Icon from '../Icon/Icon';
 import './header.scss';
 
-const Header: React.FC<HeaderPropsType> = ({ isLogged, roomName }) => {
+const Header: React.FC<HeaderPropsType> = ({ roomName }) => {
   const navigate = useNavigate();
+  const isLogged = useContext(LoggedContext);
+
   const logout = useCallback(() => {
     localStorage.setItem('token', '');
     navigate('/login');
