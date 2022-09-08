@@ -20,12 +20,7 @@ const Header: React.FC<HeaderPropsType> = ({ roomName }) => {
     localStorage.setItem('token', '');
     localStorage.setItem('user_id', '');
     navigate('/login');
-  }, [navigate]);
-
-  const clear = useCallback(() => {
-    setTerm('');
-    inputRef.current?.focus();
-  }, [setTerm, inputRef]);
+  }, []);
 
   useEffect(() => {
     const timeOutId = setTimeout(async () => {
@@ -33,7 +28,12 @@ const Header: React.FC<HeaderPropsType> = ({ roomName }) => {
       setSearchResults(users);
     }, 500);
     return () => clearTimeout(timeOutId);
-  }, [term]);
+  }, [term, setSearchResults]);
+
+  const clear = useCallback(() => {
+    setTerm('');
+    inputRef.current?.focus();
+  }, [setTerm, inputRef]);
 
   return (
     <div className="head">

@@ -52,13 +52,15 @@ export const getRoomsList = async () => {
 export const makeSearch = async (term: string): Promise<Array<UserType>> => {
   if (term.length < 3) return [];
   const token = localStorage.getItem('token');
+  const userId = localStorage.getItem('user_id');
+
   try {
     const { data } = await axios.get(`${API_URL}/api/user/search?term=${term}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return data;
+    return data.filter((user: UserType) => user._id !== userId);
   } catch {
     console.error('Error while search');
     return [];

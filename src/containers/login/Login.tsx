@@ -27,7 +27,7 @@ const Login: React.FC<LoginTypeProps> = ({ showRegister }) => {
       default:
         setHint(event.target.value);
     }
-  }, []);
+  }, [setError]);
 
   return (
     <div className="login-container">
