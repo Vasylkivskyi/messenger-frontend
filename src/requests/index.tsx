@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ILogin, IRegister } from '../types';
+import { ILogin, IRegister, UserType } from '../types';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -45,6 +45,22 @@ export const getRoomsList = async () => {
     return data;
   } catch (error: unknown) {
     console.error('Error while getting rooms list');
+    return [];
+  }
+};
+
+export const makeSearch = async (term: string): Promise<Array<UserType>> => {
+  if (term.length < 3) return [];
+  const token = localStorage.getItem('token');
+  try {
+    const { data } = await axios.get(`${API_URL}/api/user/search?term=${term}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch {
+    console.error('Error while search');
     return [];
   }
 };

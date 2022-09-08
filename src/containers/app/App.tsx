@@ -17,7 +17,6 @@ const App = () => {
 
   useEffect(() => {
     (async () => {
-      console.log('roooms====>');
       const result = await getRoomsList();
       setRooms(result);
     })();

@@ -109,7 +109,6 @@ const Room: React.FC<RoomProps> = ({ setRoomName }) => {
   }, [setRoomName, roomUserName]);
 
   useEffect(() => {
-    console.log({ isLogged });
     if (!isLogged) navigate('/login');
     // if (!isLogged) navigate('*');
   }, [navigate, isLogged]);

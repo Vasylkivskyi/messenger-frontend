@@ -48,3 +48,8 @@ export type RoomType = {
 };
 
 export type RoomsListType = Array<RoomType>;
+
+export type SearchResultsType = {
+  searchResults: Array<UserType>;
+  clear: () => void
+};

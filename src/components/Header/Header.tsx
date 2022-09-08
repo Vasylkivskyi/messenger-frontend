@@ -1,19 +1,39 @@
-import React, { useCallback, useContext } from 'react';
+import React, {
+  useCallback, useContext, useEffect, useRef, useState,
+} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoggedContext } from '../../context';
-import { HeaderPropsType } from '../../types';
+import { makeSearch } from '../../requests';
+import { HeaderPropsType, UserType } from '../../types';
 import Icon from '../Icon/Icon';
+import SearchResults from '../SearchResults/SearchResults';
 import './header.scss';
 
 const Header: React.FC<HeaderPropsType> = ({ roomName }) => {
   const navigate = useNavigate();
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const isLogged = useContext(LoggedContext);
+  const [term, setTerm] = useState<string>('');
+  const [searchResults, setSearchResults] = useState<Array<UserType>>([]);
 
   const logout = useCallback(() => {
     localStorage.setItem('token', '');
     localStorage.setItem('user_id', '');
     navigate('/login');
   }, [navigate]);
+
+  const clear = useCallback(() => {
+    setTerm('');
+    inputRef.current?.focus();
+  }, [setTerm, inputRef]);
+
+  useEffect(() => {
+    const timeOutId = setTimeout(async () => {
+      const users = await makeSearch(term);
+      setSearchResults(users);
+    }, 500);
+    return () => clearTimeout(timeOutId);
+  }, [term]);
 
   return (
     <div className="head">
@@ -24,8 +44,18 @@ const Header: React.FC<HeaderPropsType> = ({ roomName }) => {
         </Link>
         {isLogged && (
         <div className="search-container">
-          <input type="text" placeholder="Search" />
-          <Icon name="search" className="header-search-wrapper" />
+          <input
+            type="text"
+            placeholder="Search"
+            value={term}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTerm(e.target.value)}
+            ref={inputRef}
+          />
+          <Icon name="search" className="header-search-icon-wrapper" />
+          {!!term.length && <Icon name="cancel" className="header-cancel-icon-wrapper" onClick={clear} />}
+          {!!searchResults.length && (
+            <SearchResults searchResults={searchResults} clear={clear} />
+          )}
         </div>
         )}
       </div>

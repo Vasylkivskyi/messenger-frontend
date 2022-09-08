@@ -15,12 +15,15 @@
   border-bottom: 1px solid $alto;
   z-index: 1;
   background: $aquaSqueeze;
+
   .left {
     @include displayFlex;
     @include alignItems(center);
+
     .header-logo-wrapper {
       @include displayFlex;
       @include alignItems(center);
+      
       .header-logo-icon-wrapper {
         .icon {
           font-size: 2.5rem;
@@ -38,8 +41,10 @@
       padding: 0.5rem;
       width: 19rem;
       position: relative;
-
+      
       input {
+        position: relative;
+        z-index: 2;
         padding: 0.3rem 1rem 0.3rem 2.5rem;
         border: 0.1rem solid $elm;
         width: 100%;
@@ -48,14 +53,32 @@
         @include titleFontStyle;
       }
 
-      .header-search-wrapper {
+      .header-search-icon-wrapper {
         position: absolute;
         top: 0.33rem;
         left: 0.4rem;
+        z-index: 2;
 
         .icon {
           color: $elm;
           font-size: 1.7rem;
+        }
+      }
+      .header-cancel-icon-wrapper {
+        position: absolute;
+        top: 0.33rem;
+        right: 0.4rem;
+        z-index: 2;
+
+        .icon {
+          color: $aquaSqueeze;
+        }
+
+        &:hover {
+          cursor: pointer;
+          .icon {
+            color: $elm;
+          }
         }
       }
     }
