@@ -1,10 +1,8 @@
-import axios from 'axios';
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../../components/Icon/Icon';
+import { login, register } from '../../requests';
 import './login.scss';
-
-const API_URL = process.env.REACT_APP_API_URL;
 
 type LoginTypeProps = {
   showRegister?: boolean
@@ -31,26 +29,6 @@ const Login: React.FC<LoginTypeProps> = ({ showRegister }) => {
     }
   }, []);
 
-  const login = useCallback(() => {
-    axios.post(`${API_URL}/api/user/login`, { username, password })
-      .then(({ data }) => localStorage.setItem('token', data.token))
-      .then(() => navigate('/'))
-      .catch((e) => {
-        const message = e.response?.data?.message || 'Something went wrong';
-        setError(message);
-      });
-  }, [username, password, hint, navigate]);
-
-  const register = useCallback(() => {
-    axios.post(`${API_URL}/api/user/register`, { username, password, hint })
-      .then(({ data }) => localStorage.setItem('token', data.token))
-      .then(() => navigate('/'))
-      .catch((e) => {
-        const message = e.response?.data?.message || 'Something went wrong';
-        setError(message);
-      });
-  }, [username, password, hint, navigate]);
-
   return (
     <div className="login-container">
       <div className="login-form">
@@ -75,7 +53,16 @@ const Login: React.FC<LoginTypeProps> = ({ showRegister }) => {
         <input type="text" placeholder="username" name="username" onChange={onChange} value={username} />
         <input type="password" placeholder="password" name="password" onChange={onChange} value={password} />
         {showRegister && <input type="text" placeholder="password hint" name="hint" onChange={onChange} value={hint} />}
-        <button className="login-btn" onClick={showRegister ? register : login}>Submit</button>
+        <button
+          className="login-btn"
+          onClick={showRegister ? () => register({
+            username, password, navigate, setError, hint,
+          }) : () => login({
+            username, password, navigate, setError,
+          })}
+        >
+          Submit
+        </button>
         {!!error && <div className="error-message">{error}</div>}
       </div>
     </div>

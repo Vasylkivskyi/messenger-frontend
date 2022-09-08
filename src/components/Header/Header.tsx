@@ -11,6 +11,7 @@ const Header: React.FC<HeaderPropsType> = ({ roomName }) => {
 
   const logout = useCallback(() => {
     localStorage.setItem('token', '');
+    localStorage.setItem('user_id', '');
     navigate('/login');
   }, [navigate]);
 
@@ -30,8 +31,12 @@ const Header: React.FC<HeaderPropsType> = ({ roomName }) => {
       </div>
       {isLogged && (
         <div className="right">
-          <Icon name="3p" className="header-icon" />
-          <div className="user-name">{roomName}</div>
+          {roomName && (
+          <>
+            <Icon name="3p" className="header-icon" />
+            <div className="user-name">{roomName}</div>
+          </>
+          )}
           <Icon name="logout" className="header-logout" onClick={logout} />
         </div>
       )}

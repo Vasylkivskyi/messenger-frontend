@@ -100,18 +100,19 @@ const messages = [
 ];
 
 const Room: React.FC<RoomProps> = ({ setRoomName }) => {
+  const isLogged = useContext(LoggedContext);
   const { roomUserName } = useParams();
   const navigate = useNavigate();
-  const isLogged = useContext(LoggedContext);
-
-  useEffect(() => {
-    if (!isLogged) navigate('/login');
-    if (!isLogged) navigate('*');
-  }, [isLogged, navigate]);
 
   useEffect(() => {
     setRoomName(roomUserName);
   }, [setRoomName, roomUserName]);
+
+  useEffect(() => {
+    console.log({ isLogged });
+    if (!isLogged) navigate('/login');
+    // if (!isLogged) navigate('*');
+  }, [navigate, isLogged]);
 
   return (
     <div className="room">

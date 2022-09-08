@@ -27,6 +27,7 @@
   },
   "rules": {
     //'no-unused-vars': ['error', { vars: 'all', args: 'none', ignoreRestSiblings: false }],
+    "no-underscore-dangle": "off",
     "no-console": [
       "warn",
       { "allow": ["clear", "info", "error", "dir", "trace"] }
