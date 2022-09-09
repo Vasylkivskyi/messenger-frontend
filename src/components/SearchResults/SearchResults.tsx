@@ -1,9 +1,12 @@
-import React from 'react';
-import { SearchResultsType } from '../../types';
-import Icon from '../Icon/Icon';
-import './searchResults.scss';
+import React from "react";
+import { SearchResultsType } from "../../types";
+import Icon from "../Icon/Icon";
+import "./searchResults.scss";
 
-const SearchResults: React.FC<SearchResultsType> = ({ searchResults, clear }) => (
+const SearchResults: React.FC<SearchResultsType> = ({
+  searchResults,
+  clear,
+}) => (
   <ul className="search-results">
     <div className="curtain" onClick={clear} />
     {searchResults.map((user) => (

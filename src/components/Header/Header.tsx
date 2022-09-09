@@ -1,26 +1,24 @@
-import React, {
-  useCallback, useContext, useEffect, useRef, useState,
-} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { LoggedContext } from '../../context';
-import { makeSearch } from '../../requests';
-import { HeaderPropsType, UserType } from '../../types';
-import Icon from '../Icon/Icon';
-import SearchResults from '../SearchResults/SearchResults';
-import './header.scss';
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { LoggedContext } from "../../context";
+import { makeSearch } from "../../requests";
+import { HeaderPropsType, UserType } from "../../types";
+import Icon from "../Icon/Icon";
+import SearchResults from "../SearchResults/SearchResults";
+import "./header.scss";
 
 const Header: React.FC<HeaderPropsType> = ({ roomName }) => {
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const isLogged = useContext(LoggedContext);
-  const [term, setTerm] = useState<string>('');
+  const [term, setTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Array<UserType>>([]);
 
   const logout = useCallback(() => {
-    localStorage.setItem('token', '');
-    localStorage.setItem('user_id', '');
-    navigate('/login');
-  }, []);
+    localStorage.setItem("token", "");
+    localStorage.setItem("user_id", "");
+    navigate("/login");
+  }, [navigate]);
 
   useEffect(() => {
     const timeOutId = setTimeout(async () => {
@@ -28,12 +26,12 @@ const Header: React.FC<HeaderPropsType> = ({ roomName }) => {
       setSearchResults(users);
     }, 500);
     return () => clearTimeout(timeOutId);
-  }, [term, setSearchResults]);
+  }, [term]);
 
   const clear = useCallback(() => {
-    setTerm('');
+    setTerm("");
     inputRef.current?.focus();
-  }, [setTerm, inputRef]);
+  }, []);
 
   return (
     <div className="head">
@@ -43,29 +41,37 @@ const Header: React.FC<HeaderPropsType> = ({ roomName }) => {
           <span className="logo-text">MessengerApp</span>
         </Link>
         {isLogged && (
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search"
-            value={term}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTerm(e.target.value)}
-            ref={inputRef}
-          />
-          <Icon name="search" className="header-search-icon-wrapper" />
-          {!!term.length && <Icon name="cancel" className="header-cancel-icon-wrapper" onClick={clear} />}
-          {!!searchResults.length && (
-            <SearchResults searchResults={searchResults} clear={clear} />
-          )}
-        </div>
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search"
+              value={term}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setTerm(e.target.value)
+              }
+              ref={inputRef}
+            />
+            <Icon name="search" className="header-search-icon-wrapper" />
+            {!!term.length && (
+              <Icon
+                name="cancel"
+                className="header-cancel-icon-wrapper"
+                onClick={clear}
+              />
+            )}
+            {!!searchResults.length && (
+              <SearchResults searchResults={searchResults} clear={clear} />
+            )}
+          </div>
         )}
       </div>
       {isLogged && (
         <div className="right">
           {roomName && (
-          <>
-            <Icon name="3p" className="header-icon" />
-            <div className="user-name">{roomName}</div>
-          </>
+            <>
+              <Icon name="3p" className="header-icon" />
+              <div className="user-name">{roomName}</div>
+            </>
           )}
           <Icon name="logout" className="header-logout" onClick={logout} />
         </div>

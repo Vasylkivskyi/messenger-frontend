@@ -1,58 +1,43 @@
 {
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "es6": true
+  },
   "extends": [
-    "airbnb",
-    "airbnb-typescript"
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended",
+    "prettier"
   ],
   "parser": "@typescript-eslint/parser",
-  "settings": {
-    "import/parsers": {
-      "@typescript-eslint/parser": [
-        ".ts",
-        ".tsx"
-      ]
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     },
-    "import/resolver": {
-      "typescript": {
-        "project": "./tsconfig.json"
-      },
-      "node": {
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx"
-        ]
-      }
-    }
+    "ecmaVersion": "latest",
+    "sourceType": "module"
   },
   "rules": {
-    //'no-unused-vars': ['error', { vars: 'all', args: 'none', ignoreRestSiblings: false }],
-    "no-underscore-dangle": "off",
-    "jsx-a11y/no-static-element-interactions": "off",
+    "prettier/prettier": "warn",
+    "react/prop-types": "off",
+    "no-empty": ["error", { "allowEmptyCatch": true }],
+    "@typescript-eslint/no-non-null-assertion": "off",
     "no-console": [
       "warn",
-      { "allow": ["clear", "info", "error", "dir", "trace"] }
-     ],
-    // '@typescript-eslint/explicit-function-return-type': 'off',
-    "jsx-a11y/control-has-associated-label": "off",
-    "jsx-a11y/click-events-have-key-events": "off",
-    "jsx-a11y/anchor-is-valid": "off",
-    "react/require-default-props": "off",
-    "react/prop-types": "off",
-    "react/button-has-type": "off",
-    "react/function-component-definition": [
-      2,
       {
-        "namedComponents": "arrow-function",
-        "unnamedComponents": "arrow-function"
+        "allow": [
+          "clear",
+          "info",
+          "error",
+          "dir",
+          "trace"
+        ]
       }
     ]
-  },
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
-  "globals": {
-    "window": true,
-    "document": true
   }
 }

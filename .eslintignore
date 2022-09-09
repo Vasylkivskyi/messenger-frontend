@@ -1,0 +1,5 @@
+src/externalLibs
+node_modules
+build
+.DS_Store
+dev
