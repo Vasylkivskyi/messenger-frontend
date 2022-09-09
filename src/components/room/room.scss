@@ -15,7 +15,6 @@
 
   .messages-list-container {
     border-bottom: 0.1rem solid $alto;
-    margin-bottom: 0.5rem;
     width: 100%;
     position: relative;
     overflow-y: overlay;
@@ -47,7 +46,7 @@
       outline: none;
       @include titleFontStyle;
       max-height: 30rem;
-      min-height: 2rem;
+      min-height: 4.5rem;
       resize: none;
       box-sizing: border-box;
     }

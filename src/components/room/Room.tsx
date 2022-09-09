@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 import { useNavigate, useParams } from "react-router-dom";
 import MessagesList from "../Messages/MessagesList";
 import "./room.scss";
@@ -145,7 +146,7 @@ const Room: React.FC<RoomProps> = ({ setRoomName }) => {
         <MessagesList messages={messages} />
       </div>
       <div className="input-container">
-        <textarea
+        <TextareaAutosize
           ref={textareaRef}
           className="textarea"
           role="textbox"
