@@ -20,7 +20,9 @@ const MessageItem: React.FC<{ message: Message }> = ({ message }) => (
   >
     <div className="message">
       <div className="text">{message.message}</div>
-      <div className="date">{message.date}</div>
+      <div className="date-container">
+        <span className="date">{message.date}</span>
+      </div>
     </div>
   </li>
 );
