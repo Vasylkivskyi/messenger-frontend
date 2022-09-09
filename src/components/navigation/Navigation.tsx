@@ -4,6 +4,7 @@ import Icon from "../Icon/Icon";
 import { getFilteredUserName } from "../../lib/helpers";
 import { RoomsListType, RoomType } from "../../types";
 import "./navigation.scss";
+import EmptyPage from "../EmptyPage/EmptyPage";
 
 const NavElement: React.FC<{ room: RoomType }> = ({ room }) => {
   const username = getFilteredUserName(room.users);
@@ -20,14 +21,16 @@ const NavElement: React.FC<{ room: RoomType }> = ({ room }) => {
   );
 };
 
-const RoomsList: React.FC<{ rooms: RoomsListType }> = ({ rooms }) => (
-  <nav className="nav">
-    {!rooms.length && null}
-    {rooms.map((r: RoomType) => (
-      <NavElement key={r._id} room={r} />
-    ))}
-    <Outlet />
-  </nav>
-);
+const RoomsList: React.FC<{ rooms: RoomsListType }> = ({ rooms }) => {
+  if (!rooms.length) return <EmptyPage />;
+  return (
+    <nav className="nav">
+      {rooms.map((r: RoomType) => (
+        <NavElement key={r._id} room={r} />
+      ))}
+      <Outlet />
+    </nav>
+  );
+};
 
 export default RoomsList;

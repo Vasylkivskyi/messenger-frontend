@@ -1,4 +1,6 @@
+import { Dispatch } from "react";
 import { NavigateFunction } from "react-router-dom";
+import { ROOM_ACTION_TYPES } from "../reducers";
 
 export type Message = {
   id: string;
@@ -13,12 +15,15 @@ export type RoomProps = {
 
 export type HeaderPropsType = {
   roomName: string | undefined;
+  rooms: RoomsListType;
+  dispatch: Dispatch<RoomActionType>;
 };
 
 export type IconPropsType = {
   name: string;
   className?: string;
-  onClick?: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onClick?: (arg0: any) => void;
 };
 
 export interface ILogin {
@@ -51,5 +56,12 @@ export type RoomsListType = Array<RoomType>;
 
 export type SearchResultsType = {
   searchResults: Array<UserType>;
-  clear: () => void;
+  clear: (willFocus: boolean) => void;
+  rooms: RoomsListType;
+  dispatch: Dispatch<RoomActionType>;
+};
+
+export type RoomActionType = {
+  type: ROOM_ACTION_TYPES;
+  payload: RoomsListType;
 };

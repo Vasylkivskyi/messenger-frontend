@@ -7,7 +7,7 @@ import Icon from "../Icon/Icon";
 import SearchResults from "../SearchResults/SearchResults";
 import "./header.scss";
 
-const Header: React.FC<HeaderPropsType> = ({ roomName }) => {
+const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const isLogged = useContext(LoggedContext);
@@ -28,9 +28,11 @@ const Header: React.FC<HeaderPropsType> = ({ roomName }) => {
     return () => clearTimeout(timeOutId);
   }, [term]);
 
-  const clear = useCallback(() => {
+  const clear = useCallback((willFocus = true) => {
     setTerm("");
-    inputRef.current?.focus();
+    if (willFocus) {
+      inputRef.current?.focus();
+    }
   }, []);
 
   return (
@@ -60,7 +62,12 @@ const Header: React.FC<HeaderPropsType> = ({ roomName }) => {
               />
             )}
             {!!searchResults.length && (
-              <SearchResults searchResults={searchResults} clear={clear} />
+              <SearchResults
+                searchResults={searchResults}
+                clear={clear}
+                rooms={rooms}
+                dispatch={dispatch}
+              />
             )}
           </div>
         )}

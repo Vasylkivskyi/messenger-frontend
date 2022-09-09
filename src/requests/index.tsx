@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ILogin, IRegister, UserType } from "../types";
+import { ILogin, IRegister, RoomType, UserType } from "../types";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -75,5 +75,25 @@ export const makeSearch = async (term: string): Promise<Array<UserType>> => {
   } catch {
     console.error("Error while search");
     return [];
+  }
+};
+
+export const createRoom = async (userId: string): Promise<RoomType | null> => {
+  const token = localStorage.getItem("token");
+  const currentUser = localStorage.getItem("user_id");
+  try {
+    const { data } = await axios.post(
+      `${API_URL}/api/rooms/create`,
+      { users: [currentUser, userId] },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return data;
+  } catch {
+    console.error("Error while creating the room");
+    return null;
   }
 };

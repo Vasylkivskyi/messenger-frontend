@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Icon from "../../components/Icon/Icon";
 import { login, register } from "../../requests";
 import "./login.scss";
@@ -88,6 +88,15 @@ const Login: React.FC<LoginTypeProps> = ({ showRegister }) => {
           Submit
         </button>
         {!!error && <div className="error-message">{error}</div>}
+      </div>
+      <div>
+        {showRegister ? "Already have an account? " : "Don't have an account? "}
+        <NavLink
+          to={showRegister ? "/login" : "/register"}
+          className="register-link"
+        >
+          {showRegister ? "Login" : "Register"}
+        </NavLink>
       </div>
     </div>
   );
