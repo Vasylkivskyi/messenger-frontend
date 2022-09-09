@@ -51,7 +51,6 @@ const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setTerm(e.target.value)
               }
-              ref={inputRef}
             />
             <Icon name="search" className="header-search-icon-wrapper" />
             {!!term.length && (

@@ -25,9 +25,12 @@ const App = () => {
   );
 
   useEffect(() => {
-    const socketInstance = io(`${API_URL}`);
-    setSocket(socketInstance);
-  }, []);
+    (() => {
+      const newSocket = io(`${API_URL}`);
+      setSocket(newSocket);
+      return () => newSocket.close();
+    })();
+  }, [setSocket]);
 
   useEffect(() => {
     setLogged(!!localStorage.getItem("token"));

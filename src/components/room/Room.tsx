@@ -1,10 +1,16 @@
-import React, { useContext, useEffect } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import MessagesList from "../Messages/MessagesList";
 import "./room.scss";
 import { RoomProps } from "../../types";
 import Icon from "../Icon/Icon";
-import { LoggedContext } from "../../context";
+import { LoggedContext, SocketContext } from "../../context";
 
 const messages = [
   {
@@ -100,18 +106,38 @@ const messages = [
 ];
 
 const Room: React.FC<RoomProps> = ({ setRoomName }) => {
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const isLogged = useContext(LoggedContext);
+  const [text, setText] = useState<string>("");
+  const currentUserId = localStorage.getItem("user_id");
   const { roomUserName } = useParams();
   const navigate = useNavigate();
-
+  const socket = useContext(SocketContext);
   useEffect(() => {
     setRoomName(roomUserName);
   }, [setRoomName, roomUserName]);
 
   useEffect(() => {
     if (!isLogged) navigate("/login");
-    // if (!isLogged) navigate('*');
   }, [isLogged, navigate]);
+
+  const sendMessage = useCallback(() => {
+    return null;
+  }, [text]);
+
+  const onKeyPress = useCallback(
+    (event: React.KeyboardEvent<HTMLSpanElement>) => {
+      if (event.key === "Enter" && event.shiftKey) {
+        event.preventDefault();
+        setText((prev) => prev + "\n");
+      }
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
+      }
+    },
+    [sendMessage]
+  );
 
   return (
     <div className="room">
@@ -119,10 +145,15 @@ const Room: React.FC<RoomProps> = ({ setRoomName }) => {
         <MessagesList messages={messages} />
       </div>
       <div className="input-container">
-        <div className="textarea-wrapper">
-          <span className="textarea" role="textbox" contentEditable />
-        </div>
-        <Icon name="send" className="send-icon-wrapper" />
+        <textarea
+          ref={textareaRef}
+          className="textarea"
+          role="textbox"
+          onChange={(event) => setText(event.target.value)}
+          onKeyPress={(event) => onKeyPress(event)}
+          value={text}
+        />
+        <Icon name="send" className="send-icon-wrapper" onClick={sendMessage} />
       </div>
     </div>
   );

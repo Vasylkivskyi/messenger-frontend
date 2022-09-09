@@ -37,26 +37,19 @@
     align-items: flex-end;
     padding: 1rem;
 
-    .textarea-wrapper {
-      flex: 1;
+    .textarea {
+      font-family: "Roboto", sans-serif;
       background: $white;
       padding: 1rem;
       border: 0.2rem solid $elm;
       @include borderRadius(0.8rem);
-
-
-      .textarea {
-        display: block;
-        width: 100%;
-        resize: both;
-        min-height: 2rem;
-        line-height: 2rem;
-        word-break: break-all;
-        outline: none;
-        max-height: 30rem;
-        overflow-y: auto;
-        @include titleFontStyle;
-      }
+      width: 100%;
+      outline: none;
+      @include titleFontStyle;
+      max-height: 30rem;
+      min-height: 2rem;
+      resize: none;
+      box-sizing: border-box;
     }
 
     .send-icon-wrapper {
