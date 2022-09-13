@@ -9,8 +9,11 @@ export type Message = {
   date: string;
 };
 
+export type Messages = Array<Message>;
+
 export type RoomProps = {
   setRoomName: (roomUserName: string | undefined) => void;
+  rooms: RoomsListType;
 };
 
 export type HeaderPropsType = {
@@ -64,4 +67,21 @@ export type SearchResultsType = {
 export type RoomActionType = {
   type: ROOM_ACTION_TYPES;
   payload: RoomsListType;
+};
+
+export enum MessagesEvents {
+  CREATE_MESSAGE = "create_message",
+}
+
+export enum RoomEvents {
+  JOIN_ROOM = "join_room",
+  ROOM_CREATED = "room_created",
+}
+
+export type NavElementType = {
+  room: RoomType;
+};
+
+export type NavigationType = {
+  rooms: RoomsListType;
 };

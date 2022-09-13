@@ -1,15 +1,7 @@
 import React from "react";
-import "./messagesList.scss";
 import cc from "classcat";
-
-type Message = {
-  id: string;
-  userId: string;
-  message: string;
-  date: string;
-};
-
-type Messages = Array<Message>;
+import { Message, Messages } from "../../types";
+import "./messagesList.scss";
 
 const MessageItem: React.FC<{ message: Message }> = ({ message }) => (
   <li
@@ -19,7 +11,7 @@ const MessageItem: React.FC<{ message: Message }> = ({ message }) => (
     })}
   >
     <div className="message">
-      <div className="text">{message.message}</div>
+      <div className="text">{message.text}</div>
       <div className="date-container">
         <span className="date">{message.date}</span>
       </div>

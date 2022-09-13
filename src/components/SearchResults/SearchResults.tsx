@@ -1,43 +1,27 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { getFilteredUserName } from "../../lib/helpers";
-import { ROOM_ACTION_TYPES } from "../../reducers";
-import { createRoom } from "../../requests";
-import { SearchResultsType, UserType } from "../../types";
+import { SocketContext } from "../../context";
+import { RoomEvents, SearchResultsType, UserType } from "../../types";
 import Icon from "../Icon/Icon";
 import "./searchResults.scss";
 
 const SearchResults: React.FC<SearchResultsType> = ({
   searchResults,
   clear,
-  rooms,
-  dispatch,
 }) => {
   const navigate = useNavigate();
-
+  const socket = useContext(SocketContext);
   const onClick = useCallback(
     (user: UserType) => {
       (async () => {
-        const room = await createRoom(user._id);
-        if (room) {
-          const path = getFilteredUserName(room?.users);
-          if (rooms.find((existingRoom) => existingRoom._id === room?._id)) {
-            navigate(path);
-            clear(false);
-            return;
-          } else {
-            dispatch({
-              type: ROOM_ACTION_TYPES.ADD_ROOM,
-              payload: [room],
-            });
-            navigate(path);
-            clear(false);
-            return;
-          }
-        }
+        const currentUser = localStorage.getItem("user_id");
+        socket?.emit(RoomEvents.JOIN_ROOM, {
+          usersIds: [currentUser, user._id],
+        });
+        navigate(user.username);
       })();
     },
-    [rooms, navigate, clear, dispatch]
+    [socket, navigate]
   );
 
   return (

@@ -2,11 +2,11 @@ import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import Icon from "../Icon/Icon";
 import { getFilteredUserName } from "../../lib/helpers";
-import { RoomsListType, RoomType } from "../../types";
+import { NavElementType, NavigationType, RoomType } from "../../types";
 import "./navigation.scss";
 import EmptyPage from "../EmptyPage/EmptyPage";
 
-const NavElement: React.FC<{ room: RoomType }> = ({ room }) => {
+const NavElement: React.FC<NavElementType> = ({ room }) => {
   const username = getFilteredUserName(room.users);
   return (
     <NavLink to={{ pathname: `/${username}` }} className="nav-link">
@@ -21,7 +21,7 @@ const NavElement: React.FC<{ room: RoomType }> = ({ room }) => {
   );
 };
 
-const RoomsList: React.FC<{ rooms: RoomsListType }> = ({ rooms }) => {
+const Navigation: React.FC<NavigationType> = ({ rooms }) => {
   if (!rooms.length) return <EmptyPage />;
   return (
     <nav className="nav">
@@ -33,4 +33,4 @@ const RoomsList: React.FC<{ rooms: RoomsListType }> = ({ rooms }) => {
   );
 };
 
-export default RoomsList;
+export default Navigation;

@@ -1,7 +1,10 @@
 import { createContext } from "react";
-import { Socket } from "socket.io-client";
+import { Socket, connect } from "socket.io-client";
 
-// eslint-disable-next-line import/prefer-default-export
+const API_URL = process.env.REACT_APP_API_URL;
+
+export const socket = connect(`${API_URL}`);
+
 export const LoggedContext = createContext(false);
 
-export const SocketContext = createContext<Socket | null>(null);
+export const SocketContext = createContext<Socket>(socket);
