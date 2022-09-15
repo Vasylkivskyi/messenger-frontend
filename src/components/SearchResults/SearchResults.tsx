@@ -8,6 +8,7 @@ import "./searchResults.scss";
 const SearchResults: React.FC<SearchResultsType> = ({
   searchResults,
   clear,
+  rooms,
 }) => {
   const navigate = useNavigate();
   const socket = useContext(SocketContext);
@@ -15,13 +16,18 @@ const SearchResults: React.FC<SearchResultsType> = ({
     (user: UserType) => {
       (async () => {
         const currentUser = localStorage.getItem("user_id");
-        socket?.emit(RoomEvents.JOIN_ROOM, {
-          usersIds: [currentUser, user._id],
-        });
+        const roomExists = rooms.find((room) =>
+          room.users.find((u) => u._id === user._id)
+        );
+        if (!roomExists) {
+          socket?.emit(RoomEvents.JOIN_ROOM, {
+            usersIds: [currentUser, user._id],
+          });
+        }
         navigate(user.username);
       })();
     },
-    [socket, navigate]
+    [socket, navigate, rooms]
   );
 
   return (

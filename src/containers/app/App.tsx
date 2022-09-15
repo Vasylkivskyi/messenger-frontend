@@ -22,14 +22,6 @@ const App = () => {
   );
 
   useEffect(() => {
-    (() => {
-      socket.on(RoomEvents.ROOM_CREATED, ({ room }) => {
-        dispatch({ type: ROOM_ACTION_TYPES.ADD_ROOM, payload: [room] });
-      });
-    })();
-  }, []);
-
-  useEffect(() => {
     setLogged(!!localStorage.getItem("token"));
   }, [location]);
 
@@ -39,8 +31,18 @@ const App = () => {
         const result = await getRoomsList();
         dispatch({ type: ROOM_ACTION_TYPES.SET_ROOMS, payload: result });
       })();
+    } else {
+      setRoomName("");
     }
   }, [isLogged]);
+
+  useEffect(() => {
+    (() => {
+      socket.on(RoomEvents.ROOM_CREATED, ({ room }) => {
+        dispatch({ type: ROOM_ACTION_TYPES.ADD_ROOM, payload: [room] });
+      });
+    })();
+  }, []);
 
   return (
     <LoggedContext.Provider value={!!isLogged}>

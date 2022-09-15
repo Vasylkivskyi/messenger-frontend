@@ -2,23 +2,24 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import MessagesList from "../Messages/MessagesList";
 import "./room.scss";
-import { Messages, RoomProps } from "../../types";
+import { Messages, MessagesEvents, RoomEvents, RoomProps } from "../../types";
 import Icon from "../Icon/Icon";
-import { LoggedContext } from "../../context";
+import { LoggedContext, SocketContext } from "../../context";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
+  const location = useLocation();
   const isLogged = useContext(LoggedContext);
-  // const socket = useContext(SocketContext);
+  const socket = useContext(SocketContext);
   const navigate = useNavigate();
 
   const [messages, setMessages] = useState<Messages>([]);
@@ -39,15 +40,44 @@ const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
     if (!isLogged) navigate("/login");
   }, [isLogged, navigate]);
 
+  const currentRoom = useMemo(() => {
+    return rooms.find((room) => {
+      return room.users.find(
+        (user) => `/${user.username}` === location.pathname
+      );
+    });
+  }, [rooms, location]);
+
+  useEffect(() => {
+    // socket?.emit(MessagesEvents.GET_MESSAGES, { room: currentRoom?._id });
+    socket?.on(MessagesEvents.MESSAGES_SENDED, ({ messages }) => {
+      setMessages(messages);
+    });
+    socket?.on(MessagesEvents.MESSAGE_CREATED, ({ message }) => {
+      console.log("fsdkjf;kalsj");
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: message._id,
+          userId: message.user,
+          text: message.text,
+          date: message.updatedAt,
+        },
+      ]);
+    });
+  }, [socket, currentRoom]);
+
   const sendMessage = useCallback(() => {
-    // socket?.emit(MessagesEvents.CREATE_MESSAGE, {
-    //   user: currentUserId,
-    //   room: currentRoom?._id,
-    //   text,
-    // });
-    // setText("");
+    if (!text) return;
+    const currentUserId = localStorage.getItem("user_id");
+    socket?.emit(MessagesEvents.CREATE_MESSAGE, {
+      user: currentUserId,
+      room: currentRoom?._id,
+      text,
+    });
+    setText("");
     textareaRef.current?.focus();
-  }, []);
+  }, [currentRoom, socket, text]);
 
   const onKeyPress = useCallback(
     (event: React.KeyboardEvent<HTMLSpanElement>) => {

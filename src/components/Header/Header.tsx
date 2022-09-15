@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoggedContext } from "../../context";
 import { makeSearch } from "../../requests";
 import { HeaderPropsType, UserType } from "../../types";
@@ -9,7 +9,6 @@ import "./header.scss";
 
 const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const isLogged = useContext(LoggedContext);
   const [term, setTerm] = useState<string>("");

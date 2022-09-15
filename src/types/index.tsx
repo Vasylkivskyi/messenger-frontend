@@ -71,6 +71,9 @@ export type RoomActionType = {
 
 export enum MessagesEvents {
   CREATE_MESSAGE = "create_message",
+  MESSAGE_CREATED = "message_created",
+  GET_MESSAGES = "get_messages",
+  MESSAGES_SENDED = "messages_sended",
 }
 
 export enum RoomEvents {
