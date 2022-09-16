@@ -73,13 +73,17 @@
     }
   }
 
-  .register-link  {
-    color: $elm;
-    font-weight: 500;
-    
-    &:hover {
-      text-decoration: underline;
-      color: $black;
+  .bottom {
+    margin-top: 2rem;
+
+    .register-link  {
+      color: $elm;
+      font-weight: 500;
+      
+      &:hover {
+        text-decoration: underline;
+        color: $black;
+      }
     }
   }
 }

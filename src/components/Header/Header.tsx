@@ -7,12 +7,16 @@ import Icon from "../Icon/Icon";
 import SearchResults from "../SearchResults/SearchResults";
 import "./header.scss";
 
-const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
+const Header: React.FC<HeaderPropsType> = ({
+  roomName,
+  isLogged,
+  searchResults,
+  setSearchResults,
+}) => {
   const navigate = useNavigate();
+  const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const isLogged = useContext(LoggedContext);
   const [term, setTerm] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<Array<UserType>>([]);
 
   const logout = useCallback(() => {
     localStorage.setItem("token", "");
@@ -24,9 +28,12 @@ const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
     const timeOutId = setTimeout(async () => {
       const users = await makeSearch(term);
       setSearchResults(users);
+      if (users.length) {
+        setShowSearchResults(true);
+      }
     }, 500);
     return () => clearTimeout(timeOutId);
-  }, [term]);
+  }, [term, setSearchResults]);
 
   const clear = useCallback((willFocus = true) => {
     setTerm("");
@@ -34,10 +41,6 @@ const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
       inputRef.current?.focus();
     }
   }, []);
-
-  useEffect(() => {
-    clear(true);
-  }, [location, clear]);
 
   return (
     <div className="head">
@@ -61,15 +64,14 @@ const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
               <Icon
                 name="cancel"
                 className="header-cancel-icon-wrapper"
-                onClick={clear}
+                onClick={() => clear(true)}
               />
             )}
-            {!!searchResults.length && (
+            {!!searchResults.length && showSearchResults && (
               <SearchResults
                 searchResults={searchResults}
+                hideSearchResults={() => setShowSearchResults(false)}
                 clear={clear}
-                rooms={rooms}
-                dispatch={dispatch}
               />
             )}
           </div>

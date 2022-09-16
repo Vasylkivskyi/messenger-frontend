@@ -42,35 +42,29 @@ const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
 
   const currentRoom = useMemo(() => {
     return rooms.find((room) => {
-      return room.users.find(
-        (user) => `/${user.username}` === location.pathname
-      );
+      return room.users.find((user) => `/${user.name}` === location.pathname);
     });
   }, [rooms, location]);
 
   useEffect(() => {
-    // socket?.emit(MessagesEvents.GET_MESSAGES, { room: currentRoom?._id });
-    socket?.on(MessagesEvents.MESSAGES_SENDED, ({ messages }) => {
-      setMessages(messages);
+    socket?.emit(MessagesEvents.GET_MESSAGES, { room: currentRoom?._id });
+    socket?.on(MessagesEvents.MESSAGES_RECEIVED, (data) => {
+      setMessages(data.messages);
     });
-    socket?.on(MessagesEvents.MESSAGE_CREATED, ({ message }) => {
-      console.log("fsdkjf;kalsj");
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: message._id,
-          userId: message.user,
-          text: message.text,
-          date: message.updatedAt,
-        },
-      ]);
+    socket?.on(MessagesEvents.RECEIVE_MESSAGE, ({ message }) => {
+      setMessages((prev) => [...prev, message]);
     });
+    return () => {
+      socket.off(MessagesEvents.GET_MESSAGES);
+      socket.off(MessagesEvents.MESSAGES_RECEIVED);
+      socket.off(MessagesEvents.RECEIVE_MESSAGE);
+    };
   }, [socket, currentRoom]);
 
   const sendMessage = useCallback(() => {
     if (!text) return;
     const currentUserId = localStorage.getItem("user_id");
-    socket?.emit(MessagesEvents.CREATE_MESSAGE, {
+    socket?.emit(MessagesEvents.SEND_MESSAGE, {
       user: currentUserId,
       room: currentRoom?._id,
       text,
@@ -79,6 +73,7 @@ const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
     textareaRef.current?.focus();
   }, [currentRoom, socket, text]);
 
+  console.log({ messages });
   const onKeyPress = useCallback(
     (event: React.KeyboardEvent<HTMLSpanElement>) => {
       if (event.key === "Enter" && event.shiftKey) {

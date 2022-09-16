@@ -1,9 +1,15 @@
 import { createContext } from "react";
-import { Socket, connect } from "socket.io-client";
+// eslint-disable-next-line import/no-named-as-default
+import io, { Socket } from "socket.io-client";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-export const socket = connect(`${API_URL}`);
+export const socket = io(`${API_URL}`, {
+  transports: ["websocket", "polling"],
+  reconnection: true,
+  reconnectionDelay: 5000,
+  reconnectionAttempts: 10,
+});
 
 export const LoggedContext = createContext(false);
 

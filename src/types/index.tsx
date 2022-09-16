@@ -5,6 +5,7 @@ import { ROOM_ACTION_TYPES } from "../reducers";
 export type Message = {
   id: string;
   userId: string;
+  roomId: string;
   text: string;
   date: string;
 };
@@ -18,8 +19,9 @@ export type RoomProps = {
 
 export type HeaderPropsType = {
   roomName: string | undefined;
-  rooms: RoomsListType;
-  dispatch: Dispatch<RoomActionType>;
+  isLogged: boolean;
+  searchResults: Array<UserType>;
+  setSearchResults: (users: Array<UserType>) => void;
 };
 
 export type IconPropsType = {
@@ -30,19 +32,20 @@ export type IconPropsType = {
 };
 
 export interface ILogin {
-  username: string;
+  email: string;
   password: string;
   navigate: NavigateFunction;
   setError: (message: string) => void;
 }
 
 export interface IRegister extends ILogin {
-  hint: string;
+  name: string;
 }
 
 export type UserType = {
   _id: string;
-  username: string;
+  name: string;
+  email: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -60,8 +63,7 @@ export type RoomsListType = Array<RoomType>;
 export type SearchResultsType = {
   searchResults: Array<UserType>;
   clear: (willFocus: boolean) => void;
-  rooms: RoomsListType;
-  dispatch: Dispatch<RoomActionType>;
+  hideSearchResults: () => void;
 };
 
 export type RoomActionType = {
@@ -70,14 +72,15 @@ export type RoomActionType = {
 };
 
 export enum MessagesEvents {
-  CREATE_MESSAGE = "create_message",
-  MESSAGE_CREATED = "message_created",
+  SEND_MESSAGE = "send_message",
+  RECEIVE_MESSAGE = "receive_message",
   GET_MESSAGES = "get_messages",
-  MESSAGES_SENDED = "messages_sended",
+  MESSAGES_RECEIVED = "messages_received",
 }
 
 export enum RoomEvents {
-  JOIN_ROOM = "join_room",
+  JOIN_ROOMS = "join_rooms",
+  CREATE_ROOM = "create_room",
   ROOM_CREATED = "room_created",
 }
 

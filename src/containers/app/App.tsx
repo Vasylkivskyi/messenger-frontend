@@ -11,12 +11,14 @@ import { SocketContext, LoggedContext, socket } from "../../context";
 import { getRoomsList } from "../../requests";
 import "./App.scss";
 import { roomReducer, ROOM_ACTION_TYPES } from "../../reducers";
-import { RoomEvents } from "../../types";
+import { RoomEvents, RoomType, UserType } from "../../types";
+import { Chat } from "../../components/Chat/Chat";
 
 const App = () => {
   const location = useLocation();
-  const [rooms, dispatch] = useReducer(roomReducer, []);
-  const [roomName, setRoomName] = useState<string | undefined>("");
+  const [rooms, setRooms] = useState([]);
+  const [searchResults, setSearchResults] = useState<Array<UserType>>([]);
+
   const [isLogged, setLogged] = useState<boolean>(
     !!localStorage.getItem("token")
   );
@@ -25,45 +27,27 @@ const App = () => {
     setLogged(!!localStorage.getItem("token"));
   }, [location]);
 
-  useEffect(() => {
-    if (isLogged) {
-      (async () => {
-        const result = await getRoomsList();
-        dispatch({ type: ROOM_ACTION_TYPES.SET_ROOMS, payload: result });
-      })();
-    } else {
-      setRoomName("");
-    }
-  }, [isLogged]);
-
-  useEffect(() => {
-    (() => {
-      socket.on(RoomEvents.ROOM_CREATED, ({ room }) => {
-        dispatch({ type: ROOM_ACTION_TYPES.ADD_ROOM, payload: [room] });
-      });
-    })();
-  }, []);
-
   return (
-    <LoggedContext.Provider value={!!isLogged}>
-      <SocketContext.Provider value={socket}>
-        <div className="App">
-          <Header roomName={roomName} rooms={rooms} dispatch={dispatch} />
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Login showRegister />} />
-            <Route path="/" element={<Navigation rooms={rooms} />}>
-              <Route index element={<EmptyRoom />} />
-              <Route
-                path=":roomUserName"
-                element={<Room setRoomName={setRoomName} rooms={rooms} />}
-              />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
-      </SocketContext.Provider>
-    </LoggedContext.Provider>
+    <div className="App">
+      <Header
+        roomName={"test"}
+        isLogged={isLogged}
+        searchResults={searchResults}
+        setSearchResults={setSearchResults}
+      />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Login showRegister />} />
+        <Route path="/" element={<Chat rooms={rooms} />} />
+        {/* <Route index element={<EmptyRoom />} />
+          <Route
+            path=":roomUserName"
+            element={<Room setRoomName={setRoomName} rooms={rooms} />}
+          />
+        </Route> */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
   );
 };
 
