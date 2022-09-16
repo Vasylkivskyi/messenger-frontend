@@ -7,15 +7,13 @@ import "./navigation.scss";
 import EmptyPage from "../EmptyPage/EmptyPage";
 
 const NavElement: React.FC<NavElementType> = ({ room }) => {
-  const username = getFilteredUserName(room.users);
+  const { name: username, email } = getFilteredUserName(room.members);
   return (
     <NavLink to={{ pathname: `/${username}` }} className="nav-link">
       <Icon name="face" className="nav-item-icon-wrapper" />
       <div className="room-data">
         <div className="username">{username}</div>
-        <div className="message">
-          {room.messages[room.messages.length - 1]?.text}
-        </div>
+        <div className="email">{email}</div>
       </div>
     </NavLink>
   );

@@ -3,22 +3,21 @@ import { NavigateFunction } from "react-router-dom";
 import { ROOM_ACTION_TYPES } from "../reducers";
 
 export type Message = {
-  id: string;
-  userId: string;
+  _id: string;
+  senderId: string;
+  roomId: string;
   text: string;
-  date: string;
+  createdAt: string;
 };
-
-export type Messages = Array<Message>;
 
 export type RoomProps = {
   setRoomName: (roomUserName: string | undefined) => void;
-  rooms: RoomsListType;
+  rooms: Array<RoomType>;
 };
 
 export type HeaderPropsType = {
   roomName: string | undefined;
-  rooms: RoomsListType;
+  rooms: Array<RoomType>;
   dispatch: Dispatch<RoomActionType>;
 };
 
@@ -42,31 +41,29 @@ export interface IRegister extends ILogin {
 
 export type UserType = {
   _id: string;
-  username: string;
+  name: string;
+  email: string;
   createdAt: string;
   updatedAt: string;
 };
 
 export type RoomType = {
   _id: string;
-  users: Array<UserType>;
-  messages: Array<Message>;
+  members: Array<UserType>;
   createdAt: string;
   updatedAt: string;
 };
 
-export type RoomsListType = Array<RoomType>;
-
 export type SearchResultsType = {
   searchResults: Array<UserType>;
   clear: (willFocus: boolean) => void;
-  rooms: RoomsListType;
+  rooms: Array<RoomType>;
   dispatch: Dispatch<RoomActionType>;
 };
 
 export type RoomActionType = {
   type: ROOM_ACTION_TYPES;
-  payload: RoomsListType;
+  payload: Array<RoomType>;
 };
 
 export enum MessagesEvents {
@@ -86,5 +83,5 @@ export type NavElementType = {
 };
 
 export type NavigationType = {
-  rooms: RoomsListType;
+  rooms: Array<RoomType>;
 };

@@ -36,7 +36,7 @@
         @include truncateText;
         @include titleFontStyle;
       }
-      .message {
+      .email {
         @include truncateText;
         @include paragraphFontStyle;
       }
@@ -45,7 +45,7 @@
     &.active {
       background: $aquaSqueeze;
       border-color: transparent;
-      .username, .message {
+      .username, .email {
         color: $elm;
       }
       .nav-item-icon-wrapper {
@@ -57,7 +57,7 @@
     &:hover {
       cursor: pointer;
       background: $elm;
-      .username, .message {
+      .username, .email {
         color: $white;
       }
       .nav-item-icon-wrapper {

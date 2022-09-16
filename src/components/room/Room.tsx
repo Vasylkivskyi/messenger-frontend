@@ -10,7 +10,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import MessagesList from "../Messages/MessagesList";
 import "./room.scss";
-import { Messages, MessagesEvents, RoomEvents, RoomProps } from "../../types";
+import { Message, MessagesEvents, RoomEvents, RoomProps } from "../../types";
 import Icon from "../Icon/Icon";
 import { LoggedContext, SocketContext } from "../../context";
 
@@ -22,7 +22,7 @@ const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
   const socket = useContext(SocketContext);
   const navigate = useNavigate();
 
-  const [messages, setMessages] = useState<Messages>([]);
+  const [messages, setMessages] = useState<Array<Message>>([]);
 
   const [text, setText] = useState<string>("");
 
@@ -42,9 +42,7 @@ const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
 
   const currentRoom = useMemo(() => {
     return rooms.find((room) => {
-      return room.users.find(
-        (user) => `/${user.username}` === location.pathname
-      );
+      return room.members.find((user) => `/${user.name}` === location.pathname);
     });
   }, [rooms, location]);
 
@@ -55,15 +53,7 @@ const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
     });
     socket?.on(MessagesEvents.MESSAGE_CREATED, ({ message }) => {
       console.log("fsdkjf;kalsj");
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: message._id,
-          userId: message.user,
-          text: message.text,
-          date: message.updatedAt,
-        },
-      ]);
+      setMessages((prev) => [...prev, message]);
     });
   }, [socket, currentRoom]);
 

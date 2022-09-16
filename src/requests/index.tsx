@@ -41,14 +41,11 @@ export const getRoomsList = async () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("user_id");
   try {
-    const { data } = await axios.get(
-      `${API_URL}/api/rooms/getRooms?userId=${userId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const { data } = await axios.get(`${API_URL}/api/rooms/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return data;
   } catch (error: unknown) {
     // eslint-disable-next-line no-console

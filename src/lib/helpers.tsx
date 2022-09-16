@@ -1,7 +1,10 @@
 import { UserType } from "../types";
 
 // eslint-disable-next-line import/prefer-default-export
-export const getFilteredUserName = (users: Array<UserType>): string => {
+export const getFilteredUserName = (
+  users: Array<UserType>
+): { name: string; email: string } => {
   const currentUserId = localStorage.getItem("user_id");
-  return users.filter((user) => user._id !== currentUserId)[0].username;
+  const { name, email } = users.filter((user) => user._id !== currentUserId)[0];
+  return { name, email };
 };

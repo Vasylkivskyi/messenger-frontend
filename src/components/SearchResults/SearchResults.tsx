@@ -17,14 +17,14 @@ const SearchResults: React.FC<SearchResultsType> = ({
       (async () => {
         const currentUser = localStorage.getItem("user_id");
         const roomExists = rooms.find((room) =>
-          room.users.find((u) => u._id === user._id)
+          room.members.find((u) => u._id === user._id)
         );
         if (!roomExists) {
           socket?.emit(RoomEvents.JOIN_ROOM, {
             usersIds: [currentUser, user._id],
           });
         }
-        navigate(user.username);
+        navigate(user.name);
       })();
     },
     [socket, navigate, rooms]
@@ -36,7 +36,7 @@ const SearchResults: React.FC<SearchResultsType> = ({
       {searchResults.map((user) => (
         <li onClick={() => onClick(user)} key={user._id}>
           <Icon name="face" className="result-icon-wrapper" />
-          {user.username}
+          {user.name}
         </li>
       ))}
     </ul>
