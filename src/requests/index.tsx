@@ -3,14 +3,18 @@ import { ILogin, IRegister, RoomType, UserType } from "../types";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-export const login = ({ username, password, navigate, setError }: ILogin) => {
+export const login = ({ email, password, navigate, setError }: ILogin) => {
   axios
-    .post(`${API_URL}/api/user/login`, { username, password })
+    .post(`${API_URL}/api/user/login`, { email, password })
     .then(({ data }) => {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user_id", data.id);
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user_id", data._id);
+        navigate("/");
+      } else {
+        throw Error();
+      }
     })
-    .then(() => navigate("/"))
     .catch((e) => {
       const message = e.response?.data?.message || "Something went wrong";
       setError(message);
@@ -18,17 +22,17 @@ export const login = ({ username, password, navigate, setError }: ILogin) => {
 };
 
 export const register = ({
-  username,
+  email,
+  name,
   password,
-  hint,
   navigate,
   setError,
 }: IRegister) => {
   axios
-    .post(`${API_URL}/api/user/register`, { username, password, hint })
+    .post(`${API_URL}/api/user/register`, { name, password, email })
     .then(({ data }) => {
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user_id", data.id);
+      localStorage.setItem("user_id", data._id);
     })
     .then(() => navigate("/"))
     .catch((e) => {
@@ -41,11 +45,14 @@ export const getRoomsList = async () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("user_id");
   try {
-    const { data } = await axios.get(`${API_URL}/api/rooms/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const { data } = await axios.get(
+      `${API_URL}/api/rooms/getRooms?userId=${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return data;
   } catch (error: unknown) {
     // eslint-disable-next-line no-console
@@ -80,14 +87,15 @@ export const createRoom = async (userId: string): Promise<RoomType | null> => {
   const currentUser = localStorage.getItem("user_id");
   try {
     const { data } = await axios.post(
-      `${API_URL}/api/rooms/create`,
-      { users: [currentUser, userId] },
+      `${API_URL}/api/rooms/`,
+      { senderId: currentUser, receiverId: userId },
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
     );
+    console.log({ data });
     return data;
   } catch {
     console.error("Error while creating the room");

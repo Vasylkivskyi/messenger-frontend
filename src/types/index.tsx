@@ -29,14 +29,14 @@ export type IconPropsType = {
 };
 
 export interface ILogin {
-  username: string;
+  email: string;
   password: string;
   navigate: NavigateFunction;
   setError: (message: string) => void;
 }
 
 export interface IRegister extends ILogin {
-  hint: string;
+  name: string;
 }
 
 export type UserType = {

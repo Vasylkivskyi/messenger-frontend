@@ -9,23 +9,23 @@ type LoginTypeProps = {
 };
 
 const Login: React.FC<LoginTypeProps> = ({ showRegister }) => {
-  const [username, setUsername] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [hint, setHint] = useState<string>("");
   const navigate = useNavigate();
 
   const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setError("");
     switch (event.target.name) {
-      case "username":
-        setUsername(event.target.value);
+      case "email":
+        setEmail(event.target.value);
         break;
       case "password":
         setPassword(event.target.value);
         break;
       default:
-        setHint(event.target.value);
+        setName(event.target.value);
     }
   }, []);
 
@@ -35,19 +35,26 @@ const Login: React.FC<LoginTypeProps> = ({ showRegister }) => {
         <Icon name="mark_email_unread" className="logo-wrapper" />
         <h1>Sign {showRegister ? "up" : "in"} to Messenger App</h1>
         {showRegister ? (
-          <h3>
-            Please enter your nickname ,password and password hint to register.
-          </h3>
+          <h3>Please enter your email, name, and password to register.</h3>
         ) : (
-          <h3>Please enter your nickname and enter your password to login.</h3>
+          <h3>Please enter your email and password to login.</h3>
         )}
         <input
-          type="text"
-          placeholder="username"
-          name="username"
+          type="email"
+          placeholder="email"
+          name="email"
           onChange={onChange}
-          value={username}
+          value={email}
         />
+        {showRegister && (
+          <input
+            type="text"
+            placeholder="name"
+            name="name"
+            onChange={onChange}
+            value={name}
+          />
+        )}
         <input
           type="password"
           placeholder="password"
@@ -55,30 +62,21 @@ const Login: React.FC<LoginTypeProps> = ({ showRegister }) => {
           onChange={onChange}
           value={password}
         />
-        {showRegister && (
-          <input
-            type="text"
-            placeholder="password hint"
-            name="hint"
-            onChange={onChange}
-            value={hint}
-          />
-        )}
         <button
           className="login-btn"
           onClick={
             showRegister
               ? () =>
                   register({
-                    username,
+                    name,
                     password,
+                    email,
                     navigate,
                     setError,
-                    hint,
                   })
               : () =>
                   login({
-                    username,
+                    email,
                     password,
                     navigate,
                     setError,
@@ -89,7 +87,7 @@ const Login: React.FC<LoginTypeProps> = ({ showRegister }) => {
         </button>
         {!!error && <div className="error-message">{error}</div>}
       </div>
-      <div>
+      <div className="bottom">
         {showRegister ? "Already have an account? " : "Don't have an account? "}
         <NavLink
           to={showRegister ? "/login" : "/register"}
