@@ -1,9 +1,8 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { SocketContext } from "../../context";
 import { ROOM_ACTION_TYPES } from "../../reducers";
 import { createRoom } from "../../requests";
-import { RoomEvents, SearchResultsType, UserType } from "../../types";
+import { SearchResultsType, UserType } from "../../types";
 import Icon from "../Icon/Icon";
 import "./searchResults.scss";
 

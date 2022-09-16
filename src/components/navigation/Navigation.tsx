@@ -3,8 +3,8 @@ import { NavLink, Outlet } from "react-router-dom";
 import Icon from "../Icon/Icon";
 import { getFilteredUserName } from "../../lib/helpers";
 import { NavElementType, NavigationType, RoomType } from "../../types";
-import "./navigation.scss";
 import EmptyPage from "../EmptyPage/EmptyPage";
+import "./navigation.scss";
 
 const NavElement: React.FC<NavElementType> = ({ room }) => {
   const { name: username, email } = getFilteredUserName(room.members);

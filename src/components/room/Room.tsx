@@ -6,15 +6,15 @@ import React, {
   useRef,
   useState,
 } from "react";
-import TextareaAutosize from "react-textarea-autosize";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import TextareaAutosize from "react-textarea-autosize";
 import MessagesList from "../Messages/MessagesList";
-import "./room.scss";
-import { Message, MessagesEvents, RoomEvents, RoomProps } from "../../types";
+import { Message, MessagesEvents, RoomProps } from "../../types";
 import Icon from "../Icon/Icon";
 import { LoggedContext, SocketContext } from "../../context";
+import { getMessagesList } from "../../requests";
+import "./room.scss";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const location = useLocation();
@@ -33,10 +33,6 @@ const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
   }, [setRoomName, roomUserName]);
 
   useEffect(() => {
-    setMessages([]);
-  }, []);
-
-  useEffect(() => {
     if (!isLogged) navigate("/login");
   }, [isLogged, navigate]);
 
@@ -47,23 +43,23 @@ const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
   }, [rooms, location]);
 
   useEffect(() => {
-    // socket?.emit(MessagesEvents.GET_MESSAGES, { room: currentRoom?._id });
-    socket?.on(MessagesEvents.MESSAGES_SENDED, ({ messages }) => {
-      setMessages(messages);
-    });
-    socket?.on(MessagesEvents.MESSAGE_CREATED, ({ message }) => {
-      setMessages((prev) => [...prev, message]);
-    });
-  }, [socket, currentRoom]);
+    socket?.on(
+      MessagesEvents.RECEIVE_MESSAGE,
+      ({ message }: { message: Message }) => {
+        setMessages((prev) => [...prev, message]);
+      }
+    );
+  }, [socket]);
 
   const sendMessage = useCallback(() => {
     if (!text) return;
     const currentUserId = localStorage.getItem("user_id");
-    socket?.emit(MessagesEvents.CREATE_MESSAGE, {
-      user: currentUserId,
-      room: currentRoom?._id,
+    const message = {
+      senderId: currentUserId,
+      roomId: currentRoom?._id,
       text,
-    });
+    };
+    socket?.emit(MessagesEvents.SEND_MESSAGE, message);
     setText("");
     textareaRef.current?.focus();
   }, [currentRoom, socket, text]);
@@ -81,6 +77,15 @@ const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
     },
     [sendMessage]
   );
+
+  useEffect(() => {
+    (async () => {
+      if (currentRoom) {
+        const messages = await getMessagesList(currentRoom._id);
+        setMessages(messages);
+      }
+    })();
+  }, [currentRoom]);
 
   return (
     <div className="room">

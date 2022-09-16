@@ -68,10 +68,14 @@ export type RoomActionType = {
 };
 
 export enum MessagesEvents {
-  CREATE_MESSAGE = "create_message",
-  MESSAGE_CREATED = "message_created",
+  SEND_MESSAGE = "send_message",
+  RECEIVE_MESSAGE = "receive_message",
   GET_MESSAGES = "get_messages",
-  MESSAGES_SENDED = "messages_sended",
+  MESSAGES_RECEIVED = "messages_received",
+}
+
+export enum SocketUserEvents {
+  ADD_USER = "add_user",
 }
 
 export enum RoomEvents {

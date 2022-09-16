@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LoggedContext } from "../../context";
+import { LoggedContext, SocketContext } from "../../context";
 import { makeSearch } from "../../requests";
 import { HeaderPropsType, UserType } from "../../types";
 import Icon from "../Icon/Icon";
@@ -14,12 +14,14 @@ const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
   const [term, setTerm] = useState<string>("");
   const [showSearchResult, setShowSearchResults] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<Array<UserType>>([]);
+  const socket = useContext(SocketContext);
 
   const logout = useCallback(() => {
     localStorage.setItem("token", "");
     localStorage.setItem("user_id", "");
+    socket?.disconnect();
     navigate("/login");
-  }, [navigate]);
+  }, [navigate, socket]);
 
   useEffect(() => {
     const timeOutId = setTimeout(async () => {

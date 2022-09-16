@@ -1,26 +1,28 @@
 import { useEffect, useReducer, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-// eslint-disable-next-line import/no-named-as-default
+import { connect, Socket } from "socket.io-client";
 import Login from "../Login/Login";
 import Navigation from "../../components/Navigation/Navigation";
 import EmptyRoom from "../../components/EmptyRoom/EmptyRoom";
 import Room from "../../components/Room/Room";
 import NotFound from "../../components/NotFound/NotFound";
 import Header from "../../components/Header/Header";
-import { SocketContext, LoggedContext, socket } from "../../context";
+import { SocketContext, LoggedContext } from "../../context";
 import { getRoomsList } from "../../requests";
-import "./App.scss";
 import { roomReducer, ROOM_ACTION_TYPES } from "../../reducers";
-import { RoomEvents } from "../../types";
+import { RoomEvents, SocketUserEvents } from "../../types";
+import "./App.scss";
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 const App = () => {
   const location = useLocation();
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [rooms, dispatch] = useReducer(roomReducer, []);
   const [roomName, setRoomName] = useState<string | undefined>("");
   const [isLogged, setLogged] = useState<boolean>(
     !!localStorage.getItem("token")
   );
-
   useEffect(() => {
     setLogged(!!localStorage.getItem("token"));
   }, [location]);
@@ -28,6 +30,9 @@ const App = () => {
   useEffect(() => {
     if (isLogged) {
       (async () => {
+        const socket = connect(`${API_URL}`);
+        setSocket(socket);
+        socket.emit(SocketUserEvents.ADD_USER, localStorage.getItem("user_id"));
         const result = await getRoomsList();
         dispatch({ type: ROOM_ACTION_TYPES.SET_ROOMS, payload: result });
       })();
@@ -38,11 +43,11 @@ const App = () => {
 
   useEffect(() => {
     (() => {
-      socket.on(RoomEvents.ROOM_CREATED, ({ room }) => {
+      socket?.on(RoomEvents.ROOM_CREATED, ({ room }) => {
         dispatch({ type: ROOM_ACTION_TYPES.ADD_ROOM, payload: [room] });
       });
     })();
-  }, []);
+  }, [socket]);
 
   return (
     <LoggedContext.Provider value={!!isLogged}>

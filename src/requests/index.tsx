@@ -52,7 +52,6 @@ export const getRoomsList = async () => {
     });
     return data;
   } catch (error: unknown) {
-    // eslint-disable-next-line no-console
     console.error("Error while getting rooms list");
     return [];
   }
@@ -96,5 +95,20 @@ export const createRoom = async (userId: string): Promise<RoomType | null> => {
   } catch {
     console.error("Error while creating the room");
     return null;
+  }
+};
+
+export const getMessagesList = async (roomId: string) => {
+  const token = localStorage.getItem("token");
+  try {
+    const { data } = await axios.get(`${API_URL}/api/messages/${roomId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  } catch (error: unknown) {
+    console.error("Error while getting messages list");
+    return [];
   }
 };

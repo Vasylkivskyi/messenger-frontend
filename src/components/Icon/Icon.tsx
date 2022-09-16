@@ -1,7 +1,7 @@
 import React from "react";
 import cc from "classcat";
-import "./icon.scss";
 import { IconPropsType } from "../../types";
+import "./icon.scss";
 
 const Icon: React.FC<IconPropsType> = ({ name, className, onClick }) => (
   <div className={cc(["icon-wrapper", className])} onClick={onClick}>
