@@ -92,7 +92,6 @@ export const createRoom = async (userId: string): Promise<RoomType | null> => {
         },
       }
     );
-    console.log({ data });
     return data;
   } catch {
     console.error("Error while creating the room");

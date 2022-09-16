@@ -59,6 +59,7 @@ export type SearchResultsType = {
   clear: (willFocus: boolean) => void;
   rooms: Array<RoomType>;
   dispatch: Dispatch<RoomActionType>;
+  hideSearchResults: () => void;
 };
 
 export type RoomActionType = {

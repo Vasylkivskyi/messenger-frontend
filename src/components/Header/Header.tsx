@@ -12,6 +12,7 @@ const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const isLogged = useContext(LoggedContext);
   const [term, setTerm] = useState<string>("");
+  const [showSearchResult, setShowSearchResults] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<Array<UserType>>([]);
 
   const logout = useCallback(() => {
@@ -23,6 +24,7 @@ const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
   useEffect(() => {
     const timeOutId = setTimeout(async () => {
       const users = await makeSearch(term);
+      setShowSearchResults(true);
       setSearchResults(users);
     }, 500);
     return () => clearTimeout(timeOutId);
@@ -34,10 +36,6 @@ const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
       inputRef.current?.focus();
     }
   }, []);
-
-  useEffect(() => {
-    clear(true);
-  }, [location, clear]);
 
   return (
     <div className="head">
@@ -64,12 +62,13 @@ const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
                 onClick={clear}
               />
             )}
-            {!!searchResults.length && (
+            {!!searchResults.length && showSearchResult && (
               <SearchResults
                 searchResults={searchResults}
                 clear={clear}
                 rooms={rooms}
                 dispatch={dispatch}
+                hideSearchResults={() => setShowSearchResults(false)}
               />
             )}
           </div>
