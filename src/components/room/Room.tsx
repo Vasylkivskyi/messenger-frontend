@@ -52,7 +52,6 @@ const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
       setMessages(messages);
     });
     socket?.on(MessagesEvents.MESSAGE_CREATED, ({ message }) => {
-      console.log("fsdkjf;kalsj");
       setMessages((prev) => [...prev, message]);
     });
   }, [socket, currentRoom]);
