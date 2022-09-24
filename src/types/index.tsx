@@ -11,12 +11,11 @@ export type Message = {
 };
 
 export type RoomProps = {
-  setRoomName: (roomUserName: string | undefined) => void;
   rooms: Array<RoomType>;
 };
 
 export type HeaderPropsType = {
-  roomName: string | undefined;
+  userName: string | undefined;
   rooms: Array<RoomType>;
   dispatch: Dispatch<RoomActionType>;
 };
@@ -31,8 +30,6 @@ export type IconPropsType = {
 export interface ILogin {
   email: string;
   password: string;
-  navigate: NavigateFunction;
-  setError: (message: string) => void;
 }
 
 export interface IRegister extends ILogin {
@@ -89,4 +86,21 @@ export type NavElementType = {
 
 export type NavigationType = {
   rooms: Array<RoomType>;
+};
+
+export type localStorageValueType = {
+  [key: string]: string | number | boolean;
+} | null;
+
+export type useLocalStorageReturnType = [
+  value: localStorageValueType,
+  setValue: (data: unknown) => void
+];
+
+export type ErrorType = {
+  response?: {
+    data?: {
+      message: string;
+    };
+  };
 };

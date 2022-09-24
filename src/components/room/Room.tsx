@@ -6,31 +6,25 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import MessagesList from "../Messages/MessagesList";
 import { Message, MessagesEvents, RoomProps } from "../../types";
 import Icon from "../Icon/Icon";
-import { LoggedContext, SocketContext } from "../../context";
+import { LoggedContext, SocketContext, UserContext } from "../../context";
 import { getMessagesList } from "../../requests";
 import "./room.scss";
 
-const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
+const Room: React.FC<RoomProps> = ({ rooms }) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const location = useLocation();
   const isLogged = useContext(LoggedContext);
   const socket = useContext(SocketContext);
   const navigate = useNavigate();
-
+  const userData = useContext(UserContext);
   const [messages, setMessages] = useState<Array<Message>>([]);
 
   const [text, setText] = useState<string>("");
-
-  const { roomUserName } = useParams();
-
-  useEffect(() => {
-    setRoomName(roomUserName);
-  }, [setRoomName, roomUserName]);
 
   useEffect(() => {
     if (!isLogged) navigate("/login");
@@ -53,16 +47,15 @@ const Room: React.FC<RoomProps> = ({ setRoomName, rooms }) => {
 
   const sendMessage = useCallback(() => {
     if (!text) return;
-    const currentUserId = localStorage.getItem("user_id");
     const message = {
-      senderId: currentUserId,
+      senderId: userData?._id,
       roomId: currentRoom?._id,
       text,
     };
     socket?.emit(MessagesEvents.SEND_MESSAGE, message);
     setText("");
     textareaRef.current?.focus();
-  }, [currentRoom, socket, text]);
+  }, [currentRoom, socket, text, userData]);
 
   const onKeyPress = useCallback(
     (event: React.KeyboardEvent<HTMLSpanElement>) => {

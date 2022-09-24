@@ -1,53 +1,36 @@
 import axios from "axios";
-import { ILogin, IRegister, RoomType, UserType } from "../types";
+import {
+  ILogin,
+  IRegister,
+  RoomType,
+  localStorageValueType,
+  UserType,
+} from "../types";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-export const login = ({ email, password, navigate, setError }: ILogin) => {
-  axios
-    .post(`${API_URL}/api/user/login`, { email, password })
-    .then(({ data }) => {
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user_id", data._id);
-        navigate("/");
-      } else {
-        throw Error();
-      }
-    })
-    .catch((e) => {
-      const message = e.response?.data?.message || "Something went wrong";
-      setError(message);
-    });
+export const login = async ({ email, password }: ILogin) => {
+  const { data } = await axios.post(`${API_URL}/api/user/login`, {
+    email,
+    password,
+  });
+  return data;
 };
 
-export const register = ({
-  email,
-  name,
-  password,
-  navigate,
-  setError,
-}: IRegister) => {
-  axios
-    .post(`${API_URL}/api/user/register`, { name, password, email })
-    .then(({ data }) => {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user_id", data._id);
-    })
-    .then(() => navigate("/"))
-    .catch((e) => {
-      const message = e.response?.data?.message || "Something went wrong";
-      setError(message);
-    });
+export const register = async ({ email, name, password }: IRegister) => {
+  const { data } = await axios.post(`${API_URL}/api/user/register`, {
+    name,
+    password,
+    email,
+  });
+  return data;
 };
 
-export const getRoomsList = async () => {
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("user_id");
+export const getRoomsList = async (userData: localStorageValueType) => {
   try {
-    const { data } = await axios.get(`${API_URL}/api/rooms/${userId}`, {
+    const { data } = await axios.get(`${API_URL}/api/rooms/${userData?._id}`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${userData?.token}`,
       },
     });
     return data;
@@ -57,37 +40,42 @@ export const getRoomsList = async () => {
   }
 };
 
-export const makeSearch = async (term: string): Promise<Array<UserType>> => {
+export const makeSearch = async (
+  term: string,
+  userData: localStorageValueType
+): Promise<Array<UserType>> => {
   if (term.length < 3) return [];
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("user_id");
 
   try {
     const { data } = await axios.get(
       `${API_URL}/api/user/search?term=${term}`,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userData?.token}`,
         },
       }
     );
-    return data.filter((user: UserType) => user._id !== userId);
+    return data.filter((user: UserType) => user._id !== userData?._id);
   } catch {
     console.error("Error while search");
     return [];
   }
 };
 
-export const createRoom = async (userId: string): Promise<RoomType | null> => {
-  const token = localStorage.getItem("token");
-  const currentUser = localStorage.getItem("user_id");
+export const createRoom = async ({
+  receiverId,
+  senderData,
+}: {
+  receiverId: string;
+  senderData: localStorageValueType;
+}): Promise<RoomType | null> => {
   try {
     const { data } = await axios.post(
       `${API_URL}/api/rooms/`,
-      { senderId: currentUser, receiverId: userId },
+      { senderId: senderData?._id, receiverId },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${senderData?.token}`,
         },
       }
     );
@@ -99,8 +87,9 @@ export const createRoom = async (userId: string): Promise<RoomType | null> => {
 };
 
 export const getMessagesList = async (roomId: string) => {
-  const token = localStorage.getItem("token");
+  const userData = localStorage.getItem("userData");
   try {
+    const token = JSON.parse(userData as string).token;
     const { data } = await axios.get(`${API_URL}/api/messages/${roomId}`, {
       headers: {
         Authorization: `Bearer ${token}`,

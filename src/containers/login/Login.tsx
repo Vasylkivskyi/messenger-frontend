@@ -1,7 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Icon from "../../components/Icon/Icon";
+import { LocalStorageService } from "../../lib/localStorageService";
 import { login, register } from "../../requests";
+import { ErrorType, localStorageValueType } from "../../types";
 import "./login.scss";
 
 type LoginTypeProps = {
@@ -28,6 +30,38 @@ const Login: React.FC<LoginTypeProps> = ({ showRegister }) => {
         setName(event.target.value);
     }
   }, []);
+
+  const onLogin = useCallback(async () => {
+    try {
+      const data = await login({ email, password });
+      if (data.token) {
+        LocalStorageService.setItem<localStorageValueType>("userData", data);
+        navigate("/");
+      } else {
+        throw Error();
+      }
+    } catch (err) {
+      const message =
+        (err as ErrorType).response?.data?.message || "Something went wrong";
+      setError(message);
+    }
+  }, [navigate, email, password]);
+
+  const onRegister = useCallback(async () => {
+    try {
+      const data = await register({ email, name, password });
+      if (data) {
+        LocalStorageService.setItem<localStorageValueType>("userData", data);
+        navigate("/");
+      } else {
+        throw Error();
+      }
+    } catch (err) {
+      const message =
+        (err as ErrorType).response?.data?.message || "Something went wrong";
+      setError(message);
+    }
+  }, [email, name, navigate, password]);
 
   return (
     <div className="login-container">
@@ -64,24 +98,7 @@ const Login: React.FC<LoginTypeProps> = ({ showRegister }) => {
         />
         <button
           className="login-btn"
-          onClick={
-            showRegister
-              ? () =>
-                  register({
-                    name,
-                    password,
-                    email,
-                    navigate,
-                    setError,
-                  })
-              : () =>
-                  login({
-                    email,
-                    password,
-                    navigate,
-                    setError,
-                  })
-          }
+          onClick={showRegister ? onRegister : onLogin}
         >
           Submit
         </button>

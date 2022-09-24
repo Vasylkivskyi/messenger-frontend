@@ -1,36 +1,37 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoggedContext, SocketContext } from "../../context";
+import { LocalStorageService } from "../../lib/localStorageService";
 import { makeSearch } from "../../requests";
 import { HeaderPropsType, UserType } from "../../types";
 import Icon from "../Icon/Icon";
 import SearchResults from "../SearchResults/SearchResults";
 import "./header.scss";
 
-const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
+const Header: React.FC<HeaderPropsType> = ({ userName, rooms, dispatch }) => {
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const isLogged = useContext(LoggedContext);
+  const { current: userData } = useRef(LocalStorageService.getItem("userData"));
   const [term, setTerm] = useState<string>("");
   const [showSearchResult, setShowSearchResults] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<Array<UserType>>([]);
   const socket = useContext(SocketContext);
 
   const logout = useCallback(() => {
-    localStorage.setItem("token", "");
-    localStorage.setItem("user_id", "");
+    LocalStorageService.setItem("userData", null);
     socket?.disconnect();
     navigate("/login");
   }, [navigate, socket]);
 
   useEffect(() => {
     const timeOutId = setTimeout(async () => {
-      const users = await makeSearch(term);
+      const users = await makeSearch(term, userData);
       setShowSearchResults(true);
       setSearchResults(users);
     }, 500);
     return () => clearTimeout(timeOutId);
-  }, [term]);
+  }, [term, userData]);
 
   const clear = useCallback((willFocus = true) => {
     setTerm("");
@@ -78,10 +79,10 @@ const Header: React.FC<HeaderPropsType> = ({ roomName, rooms, dispatch }) => {
       </div>
       {isLogged && (
         <div className="right">
-          {roomName && (
+          {userName && (
             <>
               <Icon name="3p" className="header-icon" />
-              <div className="user-name">{roomName}</div>
+              <div className="user-name">{userName}</div>
             </>
           )}
           <Icon name="logout" className="header-logout" onClick={logout} />

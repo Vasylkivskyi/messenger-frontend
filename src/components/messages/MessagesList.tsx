@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import cc from "classcat";
 import { Message } from "../../types";
 import { formatDate } from "../../lib/helpers";
 import "./messagesList.scss";
+import { UserContext } from "../../context";
 
 const MessageItem: React.FC<{
   message: Message;
@@ -25,10 +26,7 @@ const MessageItem: React.FC<{
 
 const MessagesList: React.FC<{ messages: Array<Message> }> = ({ messages }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  const currentUserId = useMemo(() => {
-    return localStorage.getItem("user_id");
-  }, []);
+  const userData = useContext(UserContext);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
@@ -38,7 +36,7 @@ const MessagesList: React.FC<{ messages: Array<Message> }> = ({ messages }) => {
     <div className="messages-list">
       {messages.map((m) => (
         <div ref={scrollRef} key={m._id}>
-          <MessageItem message={m} currentUserId={currentUserId} />
+          <MessageItem message={m} currentUserId={userData?._id as string} />
         </div>
       ))}
     </div>

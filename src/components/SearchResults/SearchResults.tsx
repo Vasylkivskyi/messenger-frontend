@@ -1,5 +1,6 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../context";
 import { ROOM_ACTION_TYPES } from "../../reducers";
 import { createRoom } from "../../requests";
 import { SearchResultsType, UserType } from "../../types";
@@ -14,6 +15,8 @@ const SearchResults: React.FC<SearchResultsType> = ({
   dispatch,
 }) => {
   const navigate = useNavigate();
+  const senderData = useContext(UserContext);
+
   const onClick = useCallback(
     (user: UserType) => {
       (async () => {
@@ -21,7 +24,7 @@ const SearchResults: React.FC<SearchResultsType> = ({
           room.members.find((u) => u._id === user._id)
         );
         if (!roomExists) {
-          const room = await createRoom(user._id);
+          const room = await createRoom({ receiverId: user._id, senderData });
           if (room) {
             dispatch({ type: ROOM_ACTION_TYPES.ADD_ROOM, payload: [room] });
           }
@@ -31,7 +34,7 @@ const SearchResults: React.FC<SearchResultsType> = ({
         navigate(user.name);
       })();
     },
-    [navigate, rooms, dispatch, clear, hideSearchResults]
+    [navigate, rooms, dispatch, clear, hideSearchResults, senderData]
   );
 
   const hideAndClose = useCallback(() => {
