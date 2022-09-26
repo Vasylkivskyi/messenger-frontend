@@ -12,7 +12,6 @@ const Header: React.FC<HeaderPropsType> = ({ userName, rooms, dispatch }) => {
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const isLogged = useContext(LoggedContext);
-  const { current: userData } = useRef(LocalStorageService.getItem("userData"));
   const [term, setTerm] = useState<string>("");
   const [showSearchResult, setShowSearchResults] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<Array<UserType>>([]);
@@ -26,12 +25,15 @@ const Header: React.FC<HeaderPropsType> = ({ userName, rooms, dispatch }) => {
 
   useEffect(() => {
     const timeOutId = setTimeout(async () => {
-      const users = await makeSearch(term, userData);
+      const users = await makeSearch(
+        term,
+        LocalStorageService.getItem("userData")
+      );
       setShowSearchResults(true);
       setSearchResults(users);
     }, 500);
     return () => clearTimeout(timeOutId);
-  }, [term, userData]);
+  }, [term]);
 
   const clear = useCallback((willFocus = true) => {
     setTerm("");

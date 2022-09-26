@@ -33,7 +33,6 @@ export const App = () => {
 
   useEffect(() => {
     const token = userData?.token;
-
     if (token) {
       setUserName(userData?.name as string);
       const socket = connect(`${API_URL}`, {
@@ -46,9 +45,11 @@ export const App = () => {
         },
       });
       setSocket(socket);
-      socket.on("connect", () =>
-        socket.emit(SocketUserEvents.ADD_USER, userData?._id)
-      );
+      socket.on("connect", () => {
+        if (userData._id) {
+          socket.emit(SocketUserEvents.ADD_USER, userData._id);
+        }
+      });
       (async () => {
         const result = await getRoomsList(userData);
         dispatch({ type: ROOM_ACTION_TYPES.SET_ROOMS, payload: result });
