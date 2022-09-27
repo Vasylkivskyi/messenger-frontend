@@ -1,5 +1,4 @@
 import { Dispatch } from "react";
-import { NavigateFunction } from "react-router-dom";
 import { ROOM_ACTION_TYPES } from "../reducers";
 
 export type Message = {
@@ -23,8 +22,7 @@ export type HeaderPropsType = {
 export type IconPropsType = {
   name: string;
   className?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onClick?: (arg0: any) => void;
+  onClick?: (arg0?: unknown) => void;
 };
 
 export interface ILogin {

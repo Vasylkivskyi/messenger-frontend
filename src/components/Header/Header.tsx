@@ -64,7 +64,7 @@ const Header: React.FC<HeaderPropsType> = ({ userName, rooms, dispatch }) => {
               <Icon
                 name="cancel"
                 className="header-cancel-icon-wrapper"
-                onClick={clear}
+                onClick={() => clear()}
               />
             )}
             {!!searchResults.length && showSearchResult && (

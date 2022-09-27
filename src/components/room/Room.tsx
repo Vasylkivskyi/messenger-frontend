@@ -45,7 +45,7 @@ const Room: React.FC<RoomProps> = ({ rooms }) => {
         }
       }
     );
-  }, [socket]);
+  }, [socket, currentRoom]);
 
   const sendMessage = useCallback(() => {
     if (!text) return;
