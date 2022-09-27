@@ -39,7 +39,7 @@ const Room: React.FC<RoomProps> = ({ rooms }) => {
   useEffect(() => {
     socket?.on(
       MessagesEvents.RECEIVE_MESSAGE,
-      ({ message, roomId }: { message: Message, roomId: string }) => {
+      ({ message, roomId }: { message: Message; roomId: string }) => {
         if (roomId === currentRoom?._id) {
           setMessages((prev) => [...prev, message]);
         }
