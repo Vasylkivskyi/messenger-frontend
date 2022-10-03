@@ -1,5 +1,5 @@
 describe("App E2E", () => {
-  it("Should login", () => {
+  it("Should login and write message to Taras", () => {
     cy.visit("/login");
     cy.get("input[type=email]").should("have.value", "");
     cy.get("input[type=email]")
